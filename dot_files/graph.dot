@@ -1,0 +1,13 @@
+// second example tree decomposition of width 2 in https://en.wikipedia.org/wiki/Tree_decomposition
+
+graph g {
+
+   { rank = same; ab; bcd; }
+   { rank = same; cdf; cef; dfg; }
+
+   ab -- { bcd }
+   bcd -- { cdf }
+   cef -- { cdf }
+   dfg -- { }
+   cdf -- { dfg }
+}
