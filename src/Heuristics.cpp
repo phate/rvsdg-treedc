@@ -190,7 +190,7 @@ int minor_min_width_heuristic(Graph g)
 int Graph::minor_min_width_heuristic()
 {
     int lower_bound = 0;
-    for (int i = 0; i < size(); ++i) {
+    for (int i = 0; i < size() - 1; ++i) {
 
         // get the node with the smallest degree
         int v = minDegree();

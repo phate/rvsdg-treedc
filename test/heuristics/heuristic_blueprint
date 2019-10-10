@@ -1,0 +1,43 @@
+#include <heuristic_tests.h>
+
+SUITE({})
+{
+    char graph6[] = "{}";
+    int upper_bound = {};
+    int lower_bound = {};
+
+    Graph G;
+    TEST(opening_dotfile)
+    {
+        printf("Testing graph %s, expecting upper bound %d and lower bound %d\n", graph6, upper_bound, lower_bound);
+        G = graph_from_dot("{}");
+    }
+
+    TEST(min_fill_heuristic)
+    {
+        pair<vector<int>, int> h = min_fill_heuristic(G);
+        CHECK_UPPER_BOUND(h.second, upper_bound, "min_fill_heuristic");
+    }
+
+    TEST(min_width_heuristic)
+    {
+        pair<vector<int>, int> h = min_fill_heuristic(G);
+        CHECK_UPPER_BOUND(h.second, upper_bound, "min_width_heuristic");
+    }
+
+    TEST(max_cardinality_heuristic)
+    {
+        pair<vector<int>, int> h = min_fill_heuristic(G);
+        CHECK_UPPER_BOUND(h.second, upper_bound, "max_cardinality_heuristic");
+    }
+
+    TEST(minor_min_width)
+    {
+        CHECK_LOWER_BOUND(minor_min_width_heuristic(G), lower_bound, "minor_min_width");
+    }
+
+    TEST(teardown)
+    {
+        puts("");
+    }
+}
