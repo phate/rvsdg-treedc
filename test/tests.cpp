@@ -72,7 +72,7 @@ SUITE(graph)
     }
 }
 
-SUITE(K_7)
+SUITE(branchAndBound_K_7)
 {
 
     Graph G;
@@ -108,5 +108,3 @@ SUITE(K_7)
         CHECK_EQUAL(6, bb.second);
     }
 }
-
-// TODO: Add more test for heuristic functions
