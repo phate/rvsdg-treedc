@@ -21,3 +21,23 @@ add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
 find_package(UnitTest++ REQUIRED)
 include_directories(${UTPP_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} UnitTest++)
+
+# Cscope integration
+find_program(CSCOPE cscope)
+if( CSCOPE )
+    set(AllFiles ${PROJECT_SOURCES} ${PROJECT_HEADERS})
+    string(REPLACE ";" "\n" AllFiles "${AllFiles}")
+    set(CSCOPE_FILES ${CMAKE_BINARY_DIR}/cscope.files)
+    set(CSCOPE_DB ${CMAKE_BINARY_DIR}/cscope.out)
+    file(WRITE ${CSCOPE_FILES} "${AllFiles}")
+
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${CSCOPE_DB}
+        COMMAND cd ${CMAKE_BINARY_DIR} && cscope -b -q
+        DEPENDS ${CSCOPE_FILES}
+    )
+
+    ADD_CUSTOM_TARGET(gen_cscope_db ALL
+        DEPENDS ${CSCOPE_DB}
+    )
+endif()
