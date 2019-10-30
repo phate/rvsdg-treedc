@@ -21,6 +21,8 @@ while read -r test; do
     [ "${graph:0:1}" == "#" ] && continue
 
     # create dotfile from graph6 in config line
+    mkdir -p "../test/heuristics/dot_files"
+    mkdir -p "../test/heuristics/tests"
     bash g6todot.sh "${graph}" "../test/heuristics/dot_files/${fname}.dot"
 
     # if successful, create test
