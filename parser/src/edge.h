@@ -8,9 +8,9 @@ class Element;
 
 class Edge {
 public:
-    string target_str;
     Element* source;
     Element* target;
+    string target_str;
 
     Edge(Element* source, string target_str)
         : source(source)

@@ -26,12 +26,12 @@ NodeType getNodeType(const char str[])
 
 class Node : public Element {
 
-    string name;
-    NodeType type;
-
-public:
     vector<Element*> inputs;
     vector<Element*> outputs;
+
+public:
+    string name;
+    NodeType type;
 
     Node(string id, string name, NodeType type, unsigned treeviewRow, Element* parent)
         : Element(id, treeviewRow, parent)
@@ -39,28 +39,45 @@ public:
         , name(name)
     {}
 
-    ~Node() {};
-
     void appendInput(Element* e) { inputs.push_back(e); }
     void appendOutput(Element* e) { outputs.push_back(e); }
+
+    void appendIn(Element* e) { appendInput(e); };
+    void appendOut(Element* e) { appendOutput(e); };
 
     vector<Element*>* getIn() { return &inputs; }
     vector<Element*>* getOut() { return &outputs; }
 
+    friend ostream& operator<<(ostream& s, const Node& node)
+    {
+        if (node.type == NODE)
+            s << node.name;
+        else
+            s << NodeTypeStrings[node.type];
+        return s;
+    }
+
     void print(ostream& s) const
     {
+
         if (type == NODE)
-            printElement(s, "node id=" + id + ", name=" + name);
+            printElement(s, "node id=" + id + " name=" + name);
         else
-            printElement(s, "node id=" + id + ", type=" + NodeTypeStrings[type]);
+            printElement(s, "node id=" + id + " type=" + NodeTypeStrings[type]);
+
+        printEdges(s);
 
         for (Element* e : inputs)
             printChild(s, "input id=" + e->id);
 
         for (Element* e : outputs)
             printChild(s, "output id=" + e->id);
+    }
 
-        printEdges(s);
+    void dot_print_element()
+    {
+        // cout << '\t' << "node id=" << id << " name=" << *this << '\n';
+        cout << '\t' << id << "\t\t[label=\"" << name << "[" << id << "]\"]\n";
     }
 };
 

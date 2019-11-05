@@ -2,7 +2,6 @@
 #define ELEMENT_H
 
 class Edge;
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 // XML defines
@@ -45,47 +44,57 @@ public:
         , parent(parent)
     {}
 
-    Element(string id, unsigned depth)
-        : Element(id, depth, nullptr)
-    {}
     Element(string id, Element* parent)
         : Element(id, 0, parent)
     {}
 
-    virtual ~Element();
+    ~Element();
 
     void appendEdge(Edge* e) { edges.push_back(e); }
     void appendChild(Element* e) { children.push_back(e); }
 
-    virtual vector<Element*>* getIn() { return nullptr; };
-    virtual vector<Element*>* getOut() { return nullptr; };
+    virtual vector<Element*>* getIn() { return nullptr; }
+    virtual vector<Element*>* getOut() { return nullptr; }
+
+    virtual void appendIn(Element* e) {}
+    virtual void appendOut(Element* e) {}
 
     void printElement(ostream& s, string str) const
     {
         print_depth(depth);
         s << str << '\n';
     }
+
     void printChild(ostream& s, string str) const
     {
         print_depth(depth + 1);
         s << str << '\n';
     }
+
     void printEdges(ostream& s) const
     {
         for (Edge* e : edges)
             if (e->target)
-                printChild(s, "edge source=" + e->source->id + ", target=" + e->target->id);
+                printChild(s, "edge source=" + e->source->id + " target=" + e->target->id);
             else
                 printChild(s, "edge source=" + e->source->id);
     }
 
-    virtual void print(ostream& s) const {};
+    virtual void print(ostream& s) const { s << " id=" << id << " "; };
 
     friend ostream& operator<<(ostream& s, const Element& element)
     {
         for (Element* e : element.children)
             e->print(s);
         return s;
+    }
+
+    virtual void dot_print_element() {}
+
+    void dot_print()
+    {
+        for (Element* e : children)
+            e->dot_print_element();
     }
 };
 

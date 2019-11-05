@@ -38,14 +38,14 @@ bool matching_node(const pugi::xml_node_iterator& node, const char str[])
     return strcmp(node->name(), str) == 0;
 }
 
-Element* add_region(pugi::xml_node_iterator& node, int depth, Element* parent)
+Element* add_region(pugi::xml_node_iterator& node, unsigned depth, Element* parent)
 {
     Element* child = new Region(val(ATTR_ID), depth, parent);
     parent->appendChild(child);
     return child;
 }
 
-Element* add_structuredNode(pugi::xml_node_iterator& node, int depth, Element* parent)
+Element* add_structuredNode(pugi::xml_node_iterator& node, unsigned depth, Element* parent)
 {
     NodeType childType = getNodeType(val(ATTR_TYPE));
     Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
@@ -53,7 +53,7 @@ Element* add_structuredNode(pugi::xml_node_iterator& node, int depth, Element* p
     return child;
 }
 
-Element* add_simpleNode(pugi::xml_node_iterator& node, int depth, Element* parent)
+Element* add_simpleNode(pugi::xml_node_iterator& node, unsigned depth, Element* parent)
 {
     Element* child = new Node(val(ATTR_ID), val(ATTR_NAME), NODE, depth, parent);
     parent->appendChild(child);
@@ -63,30 +63,30 @@ Element* add_simpleNode(pugi::xml_node_iterator& node, int depth, Element* paren
 void add_argument(pugi::xml_node_iterator& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
-    static_cast<Region*>(parent)->appendArgument(child);
+    parent->appendIn(child);
 }
 
 void add_output(pugi::xml_node_iterator& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
-    static_cast<Node*>(parent)->appendOutput(child);
+    parent->appendOut(child);
 }
 
 // since targets of edges may be parsed after the the edge itself, we have to
 // check if a edge that points to the target exsists when creating a result or input
 void resolve_edge_target(Element* parent, string id, Element* element);
 
-void add_result(pugi::xml_node_iterator& node, Element* parent)
-{
-    Element* child = new Element(val(ATTR_ID), parent);
-    static_cast<Region*>(parent)->appendResult(child);
-    resolve_edge_target(parent, val(ATTR_ID), child);
-}
-
 void add_input(pugi::xml_node_iterator& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
-    static_cast<Node*>(parent)->appendInput(child);
+    parent->appendIn(child);
+    resolve_edge_target(parent, val(ATTR_ID), child);
+}
+
+void add_result(pugi::xml_node_iterator& node, Element* parent)
+{
+    Element* child = new Element(val(ATTR_ID), parent);
+    parent->appendOut(child);
     resolve_edge_target(parent, val(ATTR_ID), child);
 }
 
@@ -170,7 +170,7 @@ pugi::xml_document load_xml(const char source[])
     return doc;
 }
 
-Element* parseNode(pugi::xml_node_iterator& node, Element* parent, int depth)
+Element* parseNode(pugi::xml_node_iterator& node, Element* parent, unsigned depth)
 {
 
     Element* child = nullptr;
@@ -195,20 +195,23 @@ Element* parseNode(pugi::xml_node_iterator& node, Element* parent, int depth)
     return child;
 }
 
-void traverse(pugi::xml_node& parent, Element* parent_element, int depth)
+void printNode(pugi::xml_node_iterator& node, unsigned depth)
 {
-    vector<Edge*> edgeList;
-    for (auto node = parent.begin(); node != parent.end(); ++node) {
-        print_depth(depth);
+    print_depth(depth);
+    cout << node->name();
+    for (auto attribute = node->attributes_begin(); attribute != node->attributes_end(); ++attribute)
+        cout << " " << attribute->name() << "=" << attribute->value();
+    cout << endl;
+}
 
-        cout << node->name();
+void traverse(pugi::xml_node& parent, Element* parent_element, unsigned depth)
+{
+    for (auto node = parent.begin(); node != parent.end(); ++node) {
+
+        printNode(node, depth);
 
         Element* child = parseNode(node, parent_element, depth);
 
-        for (auto attribute = node->attributes_begin(); attribute != node->attributes_end(); ++attribute)
-            cout << " " << attribute->name() << "=" << attribute->value();
-
-        cout << endl;
         if (child)
             traverse(*node, child, depth + 1);
     }
@@ -225,4 +228,8 @@ int main()
     cout << endl;
     cout << endl;
     cout << root;
+
+    cout << endl;
+    cout << endl;
+    root.dot_print();
 }
