@@ -1,28 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
-
-#include "element.h"
-#include <string.h>
-
-enum NodeType {
-    NODE,
-    LAMBDA,
-    GAMMA,
-    THETA,
-    PHI
-};
-
-#define NodeTypeLen 5
-static const char* NodeTypeStrings[] = { "node", "lambda", "gamma", "theta", "phi" };
-
-NodeType getNodeType(const char str[])
-{
-    for (int i = 0; i < NodeTypeLen; ++i)
-        if (strcmp(NodeTypeStrings[i], str) == 0)
-            return (NodeType)i;
-
-    return NODE;
-}
+#pragma once
+#include "main.h"
 
 class Node : public Element {
 
@@ -30,6 +7,14 @@ class Node : public Element {
     vector<Element*> outputs;
 
 public:
+    enum NodeType {
+        NODE,
+        LAMBDA,
+        GAMMA,
+        THETA,
+        PHI
+    };
+
     string name;
     NodeType type;
 
@@ -48,37 +33,19 @@ public:
     vector<Element*>* getIn() { return &inputs; }
     vector<Element*>* getOut() { return &outputs; }
 
+    // Printing the graph corresponding to the parsed input. Region and Node implements print()
     friend ostream& operator<<(ostream& s, const Node& node)
     {
         if (node.type == NODE)
             s << node.name;
         else
-            s << NodeTypeStrings[node.type];
+            s << node.getNodeTypeString();
         return s;
     }
 
-    void print(ostream& s) const
-    {
-
-        if (type == NODE)
-            printElement(s, "node id=" + id + " name=" + name);
-        else
-            printElement(s, "node id=" + id + " type=" + NodeTypeStrings[type]);
-
-        printEdges(s);
-
-        for (Element* e : inputs)
-            printChild(s, "input id=" + e->id);
-
-        for (Element* e : outputs)
-            printChild(s, "output id=" + e->id);
-    }
-
-    void dot_print_element()
-    {
-        // cout << '\t' << "node id=" << id << " name=" << *this << '\n';
-        cout << '\t' << id << "\t\t[label=\"" << name << "[" << id << "]\"]\n";
-    }
+    static NodeType getNodeType(const char str[]);
+    const char* getNodeTypeString() const;
+    void print(ostream& s) const;
+    string replace_dot_arrow_name();
+    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter);
 };
-
-#endif

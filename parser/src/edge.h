@@ -1,8 +1,5 @@
-#ifndef EDGE_H
-#define EDGE_H
-
-#include <string>
-using namespace std;
+#pragma once
+#include "main.h"
 
 class Element;
 
@@ -28,5 +25,3 @@ public:
         : Edge(nullptr, "")
     {}
 };
-
-#endif

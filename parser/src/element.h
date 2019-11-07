@@ -1,5 +1,5 @@
-#ifndef ELEMENT_H
-#define ELEMENT_H
+#pragma once
+#include "main.h"
 
 class Edge;
 
@@ -48,6 +48,10 @@ public:
         : Element(id, 0, parent)
     {}
 
+    Element(string id)
+        : Element(id, nullptr)
+    {}
+
     ~Element();
 
     void appendEdge(Edge* e) { edges.push_back(e); }
@@ -59,43 +63,21 @@ public:
     virtual void appendIn(Element* e) {}
     virtual void appendOut(Element* e) {}
 
-    void printElement(ostream& s, string str) const
-    {
-        print_depth(depth);
-        s << str << '\n';
-    }
-
-    void printChild(ostream& s, string str) const
-    {
-        print_depth(depth + 1);
-        s << str << '\n';
-    }
-
-    void printEdges(ostream& s) const
-    {
-        for (Edge* e : edges)
-            if (e->target)
-                printChild(s, "edge source=" + e->source->id + " target=" + e->target->id);
-            else
-                printChild(s, "edge source=" + e->source->id);
-    }
-
-    virtual void print(ostream& s) const { s << " id=" << id << " "; };
-
+    // Printing the graph corresponding to the parsed input. Region and Node implements print()
     friend ostream& operator<<(ostream& s, const Element& element)
     {
         for (Element* e : element.children)
             e->print(s);
         return s;
     }
+    virtual void print(ostream& s) const { s << " id=" << id << " "; };
+    void printElement(ostream& s, string str) const;
+    void printChild(ostream& s, string str) const;
 
-    virtual void dot_print_element() {}
-
-    void dot_print()
-    {
-        for (Element* e : children)
-            e->dot_print_element();
-    }
+    // Printing dot file of graph. Region and Node implements dot_print_element()
+    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter) {}
+    void dot_print();
+    void printEdges(ostream& s) const;
+    int id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter);
+    void print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter);
 };
-
-#endif
