@@ -25,11 +25,11 @@ public:
     bool in_arguments(Element* e) { return find(arguments.begin(), arguments.end(), e) != arguments.end(); };
     bool in_results(Element* e) { return find(results.begin(), results.end(), e) != results.end(); };
 
-    void dot_print_edges(unordered_map<string, int>& node_map, int& node_map_counter);
+    void dot_print_edges(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
     string getNodeTypeString(Element* e);
-    void dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter);
-    void dot_print_results(unordered_map<string, int>& node_map, int& node_map_counter);
-    void dot_print_nodes(unordered_map<string, int>& node_map, int& node_map_counter);
+    void dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
+    void dot_print_results(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
+    void dot_print_nodes(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
     void dot_print_children();
-    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter);
+    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
 };

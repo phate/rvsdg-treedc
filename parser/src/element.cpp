@@ -55,11 +55,11 @@ int Element::id_from_map(string id, unordered_map<string, int>& node_map, int& n
 }
 
 // Print a formatted label row for the element
-void Element::print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter)
+void Element::print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file)
 {
     int map_id = id_from_map(id, node_map, node_map_counter);
     string label = "[label=\"{" + label_content + "}\"]";
-    cout << '\t' << map_id << label << '\n';
+    log('\t' << map_id << label << '\n');
 }
 
 // For each region in the rvsdg graph parsed, print a dot file corresponding to the region
@@ -67,6 +67,7 @@ void Element::dot_print()
 {
     unordered_map<string, int> node_map;
     int node_map_counter = 0;
+    ofstream null_stream;
     for (Element* e : children)
-        e->dot_print_element(node_map, node_map_counter);
+        e->dot_print_element(node_map, node_map_counter, null_stream);
 }

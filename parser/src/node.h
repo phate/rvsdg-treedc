@@ -12,7 +12,8 @@ public:
         LAMBDA,
         GAMMA,
         THETA,
-        PHI
+        PHI,
+        UNKNOWN
     };
 
     string name;
@@ -47,5 +48,5 @@ public:
     const char* getNodeTypeString() const;
     void print(ostream& s) const;
     string replace_dot_arrow_name();
-    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter);
+    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
 };

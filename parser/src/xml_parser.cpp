@@ -47,6 +47,14 @@ Element* add_structuredNode(node_t& node, unsigned depth, Element* parent)
     return child;
 }
 
+Element* add_structuredNode_unknown(node_t& node, unsigned depth, Element* parent)
+{
+    Node::NodeType childType = Node::UNKNOWN;
+    Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
+    parent->appendChild(child);
+    return child;
+}
+
 Element* add_simpleNode(node_t& node, unsigned depth, Element* parent)
 {
     Element* child = new Node(val(ATTR_ID), val(ATTR_NAME), Node::NODE, depth, parent);
@@ -151,7 +159,9 @@ Element* parseNode(node_t& node, Element* parent, unsigned depth)
 {
     Element* child;
 
-    if (is_node(TAG_NODE) && !empty_str(val(ATTR_TYPE)))
+    if (is_node(TAG_NODE) && empty_str(val(ATTR_TYPE)) && empty_str(val(ATTR_NAME)))
+        child = add_structuredNode_unknown(node, depth, parent);
+    else if (is_node(TAG_NODE) && !empty_str(val(ATTR_TYPE)))
         child = add_structuredNode(node, depth, parent);
     else if (is_node(TAG_NODE) && !empty_str(val(ATTR_NAME)))
         child = add_simpleNode(node, depth, parent);

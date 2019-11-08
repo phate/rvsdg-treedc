@@ -1,7 +1,7 @@
 #include "node.h"
 
-constexpr int NodeTypeLen = 5;
-constexpr const char* NodeTypeStrings[] = { "node", "lambda", "gamma", "theta", "phi" };
+constexpr int NodeTypeLen = 6;
+constexpr const char* NodeTypeStrings[] = { "node", "lambda", "gamma", "theta", "phi", "unknown" };
 
 Node::NodeType Node::getNodeType(const char str[])
 {
@@ -48,7 +48,7 @@ string Node::replace_dot_arrow_name()
 }
 
 // print node map id of the node with a corresponding label containing name/type and id
-void Node::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter)
+void Node::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
 {
     string node;
     if (type == NODE)
@@ -56,5 +56,5 @@ void Node::dot_print_element(unordered_map<string, int>& node_map, int& node_map
     else
         node = NodeTypeStrings[type];
 
-    print_label(id, node + "|" + id, node_map, node_map_counter);
+    print_label(id, node + "|" + id, node_map, node_map_counter, dot_file);
 }

@@ -27,6 +27,10 @@ class Edge;
 #include <string>
 #include <vector>
 
+#define log(s) \
+    cout << s; \
+    dot_file << s
+
 void print_depth(unsigned depth);
 
 class Element {
@@ -75,9 +79,9 @@ public:
     void printChild(ostream& s, string str) const;
 
     // Printing dot file of graph. Region and Node implements dot_print_element()
-    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter) {}
+    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) {}
     void dot_print();
     void printEdges(ostream& s) const;
     int id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter);
-    void print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter);
+    void print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file);
 };

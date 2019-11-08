@@ -2,7 +2,7 @@
 
 int main()
 {
-    pugi::xml_document doc = load_xml("../../rvsdg.xml");
+    pugi::xml_document doc = load_xml("/home/sigvesn/jlm/rvsdg-real.xml");
     pugi::xml_node rvsdg = doc.child("rvsdg");
     Element root("rvsdg");
     traverse(rvsdg, &root, 0);
