@@ -52,6 +52,7 @@ public:
 /*
  * Adjacency list implementation of a graph (https://en.wikipedia.org/wiki/Adjacency_list)
  * Each Row in the list is represented by a singly linked list, where each root is in the vector «nodes».
+ * Assumed that the graph is undirected and that the graph is simple (no parallel edges)
  *
  * Instead of each Node in this list having its own value/label, the nodes point to a vector containing values.
  * This is because, in the adjacency list representation, each node has several entries, if we have the graph 0 -- 1,

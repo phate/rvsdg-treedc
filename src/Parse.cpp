@@ -19,6 +19,27 @@ void parse_line(string token, vector<int>& tokens)
 // Returns the graph represented as a adjacency list: each vector represents a
 // node, as the first element, with each subsequent node in the vector being
 // the nodes the root node has an edge to
+
+bool in_token(string find, string token)
+{
+    int index = 0;
+    index = token.find(find, index);
+    return index != std::string::npos;
+}
+
+static const vector<string> node_line_blacklist = { "Graph", "graph", "node", "label", "//", "rank", "--", "->" };
+bool node_line(string token)
+{
+    if (token.empty() || token[0] == '}' || token[0] == '{')
+        return false;
+
+    for (string s : node_line_blacklist)
+        if (in_token(s, token))
+            return false;
+
+    return true;
+}
+
 vector<vector<int>> parse_dot(const char file_name[])
 {
     ifstream file(file_name);
@@ -32,15 +53,17 @@ vector<vector<int>> parse_dot(const char file_name[])
 
         stringstream line_stream(line);
         string token;
+
         line_stream >> token;
 
-        if (token.empty() || !isdigit(token[0]))
+        if (!node_line(token))
             continue;
 
         vector<int> tokens;
 
         do
-            parse_line(token, tokens);
+            if (node_line(token))
+                parse_line(token, tokens);
         while (line_stream >> token);
 
         graph.push_back(tokens);
@@ -55,11 +78,26 @@ vector<vector<int>> parse_dot(const char file_name[])
 // nodes are known beforehand
 Graph gen_graph(vector<vector<int>> adj_list)
 {
-    Graph g = Graph(adj_list.size());
+    // find unique elements in adj_list
+    vector<int> unique_list(adj_list.size(), -1);
+    for (vector<int>& adj : adj_list)
+        for (int i : adj)
+            unique_list[i] = 1;
+
+    int unique = 0;
+    for (int i : unique_list)
+        if (i > 0)
+            unique++;
+
+    Graph g = Graph(unique + 1);
     for (auto& n : adj_list) {
         int root = n[0];
-        for (int i = 1; i < n.size(); ++i)
-            g.addNode(root, n[i]);
+
+        for (int i = 1; i < n.size(); ++i) {
+            // make sure to not add duplicate edges as we assume the graph to have be simple (no parallel edges)
+            if (!g.hasNeighbor(n[i], root))
+                g.addNode(root, n[i]);
+        }
     }
 
     return g;
