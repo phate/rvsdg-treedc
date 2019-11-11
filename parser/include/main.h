@@ -1,3 +1,4 @@
+#include "edge.h"
 #include "node.h"
 #include "region.h"
 
@@ -11,5 +12,6 @@
 #include <string.h>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 using namespace std;

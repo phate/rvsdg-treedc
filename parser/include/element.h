@@ -6,6 +6,8 @@ class Edge;
 ///////////////////////////////////////////////////////////////////////////////
 // XML defines
 
+#define ROOT_NODE "rvsdg"
+
 #define TAG_NODE "node"
 #define TAG_REGION "region"
 #define TAG_EDGE "edge"
@@ -22,11 +24,7 @@ class Edge;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "edge.h"
-#include <iostream>
-#include <string>
-#include <vector>
-
+// Write output to both stdout and file
 #define log(s) \
     cout << s; \
     dot_file << s

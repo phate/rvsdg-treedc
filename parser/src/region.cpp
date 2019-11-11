@@ -51,7 +51,7 @@ string Region::getNodeTypeString(Element* e)
 
 // Prints the node map ids and corresponding labels for the nodes in the region with type/name and id.
 // Arguments and results, are beeing denoted by the type the containing node, and id of the containing region,
-// which is why we get the parent->parent->id and parent->id for these cases respectively
+// which is why we get the parent->parent->type and parent->id for these cases respectively
 
 void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
 {
@@ -73,6 +73,7 @@ void Region::dot_print_results(unordered_map<string, int>& node_map, int& node_m
     }
 }
 
+// For each node child of the region: print node map id of the node with a corresponding label containing name/type and id
 void Region::dot_print_nodes(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
 {
     for (Element* e : children)
@@ -103,7 +104,7 @@ void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_m
 
     dot_file.open("../dot_files/" + graph_name + ".dot");
     if (!dot_file.is_open())
-        cout << "not open" << endl;
+        cout << "Could not open " << graph_name << endl;
 
     log("digraph " << graph_name << " {\n\n");
     log(fmt_line);

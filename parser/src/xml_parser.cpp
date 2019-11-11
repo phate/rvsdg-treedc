@@ -20,26 +20,27 @@ a/o is the user of exactly one i/r, i/r can be the origin of several a/o
 
 #define val(n) node->attribute(n).value()
 #define is_node(str) matching_node(node, str)
-typedef pugi::xml_node_iterator node_t;
+#define empty_val(str) empty_str(val(str))
+typedef pugi::xml_node_iterator xml_node;
 
 bool empty_str(const char str[])
 {
     return str == NULL || str[0] == '\0';
 }
 
-bool matching_node(const node_t& node, const char str[])
+bool matching_node(const xml_node& node, const char str[])
 {
     return strcmp(node->name(), str) == 0;
 }
 
-Element* add_region(node_t& node, unsigned depth, Element* parent)
+Element* add_region(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child = new Region(val(ATTR_ID), depth, parent);
     parent->appendChild(child);
     return child;
 }
 
-Element* add_structuredNode(node_t& node, unsigned depth, Element* parent)
+Element* add_structuredNode(xml_node& node, Element* parent, unsigned depth)
 {
     Node::NodeType childType = Node::getNodeType(val(ATTR_TYPE));
     Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
@@ -47,7 +48,7 @@ Element* add_structuredNode(node_t& node, unsigned depth, Element* parent)
     return child;
 }
 
-Element* add_structuredNode_unknown(node_t& node, unsigned depth, Element* parent)
+Element* add_structuredNode_unknown(xml_node& node, Element* parent, unsigned depth)
 {
     Node::NodeType childType = Node::UNKNOWN;
     Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
@@ -55,20 +56,20 @@ Element* add_structuredNode_unknown(node_t& node, unsigned depth, Element* paren
     return child;
 }
 
-Element* add_simpleNode(node_t& node, unsigned depth, Element* parent)
+Element* add_simpleNode(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child = new Node(val(ATTR_ID), val(ATTR_NAME), Node::NODE, depth, parent);
     parent->appendChild(child);
     return child;
 }
 
-void add_argument(node_t& node, Element* parent)
+void add_argument(xml_node& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
     parent->appendIn(child);
 }
 
-void add_output(node_t& node, Element* parent)
+void add_output(xml_node& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
     parent->appendOut(child);
@@ -80,7 +81,7 @@ void resolve_edge_target(Element* parent, string id, Element* element)
 {
     // search through both the edges of the parent, and the edges of the
     // parents siblings (aka. the edge list of the parents parent)
-    // TODO: do we have to search the edge lists of all parent to the top of the tree?
+    // TODO: any cases where we have to search the edge lists of all parent to the top of the tree?
     for (Edge* e : parent->edges)
         if (!e->target && e->target_str == id)
             e->target = element;
@@ -90,14 +91,14 @@ void resolve_edge_target(Element* parent, string id, Element* element)
             e->target = element;
 }
 
-void add_input(node_t& node, Element* parent)
+void add_input(xml_node& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
     parent->appendIn(child);
     resolve_edge_target(parent, val(ATTR_ID), child);
 }
 
-void add_result(node_t& node, Element* parent)
+void add_result(xml_node& node, Element* parent)
 {
     Element* child = new Element(val(ATTR_ID), parent);
     parent->appendOut(child);
@@ -127,7 +128,7 @@ Element* find_source(Element& parent, string id)
     return nullptr;
 }
 
-void add_edge(node_t& node, Element* parent)
+void add_edge(xml_node& node, Element* parent)
 {
     // source and target will always be in the parent, or one of the parents childrens scope
     // the source is always set before the edges is created, so know that we will find it
@@ -155,18 +156,18 @@ void add_edge(node_t& node, Element* parent)
         cout << "ERROR: could not find source" << endl;
 }
 
-Element* parseNode(node_t& node, Element* parent, unsigned depth)
+Element* parseNode(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child;
 
-    if (is_node(TAG_NODE) && empty_str(val(ATTR_TYPE)) && empty_str(val(ATTR_NAME)))
-        child = add_structuredNode_unknown(node, depth, parent);
-    else if (is_node(TAG_NODE) && !empty_str(val(ATTR_TYPE)))
-        child = add_structuredNode(node, depth, parent);
-    else if (is_node(TAG_NODE) && !empty_str(val(ATTR_NAME)))
-        child = add_simpleNode(node, depth, parent);
+    if (is_node(TAG_NODE) && empty_val(ATTR_TYPE) && empty_val(ATTR_NAME))
+        child = add_structuredNode_unknown(node, parent, depth);
+    else if (is_node(TAG_NODE) && !empty_val(ATTR_TYPE))
+        child = add_structuredNode(node, parent, depth);
+    else if (is_node(TAG_NODE) && !empty_val(ATTR_NAME))
+        child = add_simpleNode(node, parent, depth);
     else if (is_node(TAG_REGION))
-        child = add_region(node, depth, parent);
+        child = add_region(node, parent, depth);
     else if (is_node(TAG_INPUT))
         add_input(node, parent);
     else if (is_node(TAG_OUTPUT))
@@ -182,7 +183,7 @@ Element* parseNode(node_t& node, Element* parent, unsigned depth)
 }
 
 // Print nodes while parsing
-void printNode(node_t& node, unsigned depth)
+void printNode(xml_node& node, unsigned depth)
 {
     print_depth(depth);
     cout << node->name();
@@ -206,6 +207,7 @@ void traverse(pugi::xml_node& parent, Element* parent_element, unsigned depth = 
     }
 }
 
+// Load XML file from source
 pugi::xml_document load_xml(const char source[])
 {
     pugi::xml_document doc;
@@ -221,4 +223,20 @@ pugi::xml_document load_xml(const char source[])
 
     cout << "Load result: " << parse_result.description() << "\n\n";
     return doc;
+}
+
+// Parses the rvsdg in the xml document and generates a dotfile representation of each region in the graph
+void parse_rvsdg_xml(const char rvsdg_xml[])
+{
+    pugi::xml_document doc = load_xml(rvsdg_xml);
+    pugi::xml_node rvsdg = doc.child(ROOT_NODE);
+    Element root(ROOT_NODE);
+    cout << "Parsing input ...\n\n";
+    traverse(rvsdg, &root, 0);
+
+    cout << "\n\nResulting graph:\n\n"
+         << root;
+
+    cout << "\n\nResulting dotfiles:\n\n";
+    root.dot_print();
 }
