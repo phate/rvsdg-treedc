@@ -25,14 +25,16 @@ public:
         , name(name)
     {}
 
+    virtual ~Node();
+
     void appendInput(Element* e) { inputs.push_back(e); }
     void appendOutput(Element* e) { outputs.push_back(e); }
 
     void appendIn(Element* e) { appendInput(e); };
     void appendOut(Element* e) { appendOutput(e); };
 
-    vector<Element*>* getIn() { return &inputs; }
-    vector<Element*>* getOut() { return &outputs; }
+    vector<Element*> getIn() { return inputs; }
+    vector<Element*> getOut() { return outputs; }
 
     // Printing the graph corresponding to the parsed input. Region and Node implements print()
     friend ostream& operator<<(ostream& s, const Node& node)

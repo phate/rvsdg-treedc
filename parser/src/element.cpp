@@ -2,19 +2,11 @@
 
 Element::~Element()
 {
-    for (auto it : children)
-        delete it;
+    for (Edge* e : edges)
+        delete e;
 
-    for (auto it : edges)
-        delete it;
-
-    if (getOut())
-        for (auto it : *getOut())
-            delete it;
-
-    if (getIn())
-        for (auto it : *getIn())
-            delete it;
+    for (Element* e : children)
+        delete e;
 }
 
 void print_depth(unsigned depth)

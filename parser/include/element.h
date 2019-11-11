@@ -54,13 +54,13 @@ public:
         : Element(id, nullptr)
     {}
 
-    ~Element();
+    virtual ~Element();
 
     void appendEdge(Edge* e) { edges.push_back(e); }
     void appendChild(Element* e) { children.push_back(e); }
 
-    virtual vector<Element*>* getIn() { return nullptr; }
-    virtual vector<Element*>* getOut() { return nullptr; }
+    virtual vector<Element*> getIn() { return {}; }
+    virtual vector<Element*> getOut() { return {}; }
 
     virtual void appendIn(Element* e) {}
     virtual void appendOut(Element* e) {}

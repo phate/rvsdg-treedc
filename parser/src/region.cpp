@@ -1,5 +1,14 @@
 #include "region.h"
 
+Region::~Region()
+{
+    for (Element* e : arguments)
+        delete e;
+
+    for (Element* e : results)
+        delete e;
+}
+
 // Printing the graph corresponding to the parsed input. Region and Node implements print()
 void Region::print(ostream& s) const
 {

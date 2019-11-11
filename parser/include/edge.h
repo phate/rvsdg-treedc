@@ -24,4 +24,6 @@ public:
     Edge()
         : Edge(nullptr, "")
     {}
+
+    ~Edge() {}
 };

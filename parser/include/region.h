@@ -10,14 +10,16 @@ public:
         : Element(id, treeviewRow, parent)
     {}
 
+    virtual ~Region();
+
     void appendArgument(Element* e) { arguments.insert(arguments.end(), e); }
     void appendResult(Element* e) { results.insert(results.end(), e); }
 
     void appendIn(Element* e) { appendArgument(e); };
     void appendOut(Element* e) { appendResult(e); };
 
-    vector<Element*>* getIn() { return &arguments; }
-    vector<Element*>* getOut() { return &results; }
+    vector<Element*> getIn() { return arguments; }
+    vector<Element*> getOut() { return results; }
 
     void print(ostream& s) const;
 

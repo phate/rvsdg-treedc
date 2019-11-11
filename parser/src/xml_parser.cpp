@@ -110,11 +110,11 @@ void add_result(xml_node& node, Element* parent)
 // recurses through all the parents children (the edges siblings)
 Element* find_source(Element& parent, string id)
 {
-    for (Element* e : *parent.getIn())
+    for (Element* e : parent.getIn())
         if (e->id == id)
             return e;
 
-    for (Element* e : *parent.getOut())
+    for (Element* e : parent.getOut())
         if (e->id == id)
             return e;
 
@@ -158,7 +158,7 @@ void add_edge(xml_node& node, Element* parent)
 
 Element* parseNode(xml_node& node, Element* parent, unsigned depth)
 {
-    Element* child;
+    Element* child = nullptr;
 
     if (is_node(TAG_NODE) && empty_val(ATTR_TYPE) && empty_val(ATTR_NAME))
         child = add_structuredNode_unknown(node, parent, depth);

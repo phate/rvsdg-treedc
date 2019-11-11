@@ -17,6 +17,15 @@ const char* Node::getNodeTypeString() const
     return NodeTypeStrings[type];
 }
 
+Node::~Node()
+{
+    for (Element* e : inputs)
+        delete e;
+
+    for (Element* e : outputs)
+        delete e;
+}
+
 // Printing the graph corresponding to the parsed input. Region and Node implements print()
 void Node::print(ostream& s) const
 {
