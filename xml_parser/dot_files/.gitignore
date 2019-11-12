@@ -1,0 +1,4 @@
+# Folder used for storing dotfiles
+# This files adds itself but ignores everything else in the directory
+*
+!.gitignore

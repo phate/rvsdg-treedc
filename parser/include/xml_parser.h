@@ -3,4 +3,4 @@
 
 #include "pugixml.hpp"
 
-void parse_rvsdg_xml(const char rvsdg_xml[]);
+void parse_rvsdg_xml(string rvsdg_xml);

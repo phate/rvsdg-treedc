@@ -228,9 +228,9 @@ pugi::xml_document load_xml(const char source[])
 }
 
 // Parses the rvsdg in the xml document and generates a dotfile representation of each region in the graph
-void parse_rvsdg_xml(const char rvsdg_xml[])
+void parse_rvsdg_xml(string rvsdg_xml)
 {
-    pugi::xml_document doc = load_xml(rvsdg_xml);
+    pugi::xml_document doc = load_xml(rvsdg_xml.c_str());
     pugi::xml_node rvsdg = doc.child(ROOT_NODE);
     Node root(ROOT_NODE, "", Node::RVSDG, 0, nullptr);
     cout << "Parsing input ...\n\n";
