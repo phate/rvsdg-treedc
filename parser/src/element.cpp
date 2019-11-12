@@ -39,7 +39,7 @@ void Element::printEdges(ostream& s) const
 }
 
 // Return corresponding integer id of string id, or add it to the map if it does not exist
-int Element::id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter)
+int Element::id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter) const
 {
     if (node_map.count(id) == 0)
         node_map.emplace(id, node_map_counter++);
@@ -47,7 +47,7 @@ int Element::id_from_map(string id, unordered_map<string, int>& node_map, int& n
 }
 
 // Print a formatted label row for the element
-void Element::print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file)
+void Element::print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file) const
 {
     int map_id = id_from_map(id, node_map, node_map_counter);
     string label = "[label=\"{" + label_content + "}\"]";
@@ -55,7 +55,7 @@ void Element::print_label(string id, string label_content, unordered_map<string,
 }
 
 // For each region in the rvsdg graph parsed, print a dot file corresponding to the region
-void Element::dot_print()
+void Element::dot_print() const
 {
     unordered_map<string, int> node_map;
     int node_map_counter = 0;

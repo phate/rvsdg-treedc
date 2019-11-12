@@ -75,8 +75,8 @@ void add_output(xml_node& node, Element* parent)
     parent->appendOut(child);
 }
 
-// since targets of edges may be parsed after the the edge itself, we have to
-// check if a edge that points to the target exsists when creating a result or input
+// since targets of edges may be parsed after the edge itself, we have to
+// check if a edge that points to the target exists when creating a result or input
 void resolve_edge_target(Element* parent, string id, Element* element)
 {
     // search through both the edges of the parent, and the edges of the
@@ -130,7 +130,7 @@ Element* find_source(Element& parent, string id)
 
 void add_edge(xml_node& node, Element* parent)
 {
-    // source and target will always be in the parent, or one of the parents childrens scope
+    // source and target will always be in the parent, or one of the parents children's scope
     // the source is always set before the edges is created, so know that we will find it
     // target elements can however be set both before and after, so that we
     // have to both search for the target after creating the node (if it

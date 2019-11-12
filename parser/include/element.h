@@ -63,8 +63,8 @@ public:
     void appendEdge(Edge* e) { edges.push_back(e); }
     void appendChild(Element* e) { children.push_back(e); }
 
-    virtual vector<Element*> getIn() { return {}; }
-    virtual vector<Element*> getOut() { return {}; }
+    virtual vector<Element*> getIn() const { return {}; }
+    virtual vector<Element*> getOut() const { return {}; }
 
     virtual void appendIn(Element* e) {}
     virtual void appendOut(Element* e) {}
@@ -85,9 +85,9 @@ public:
     void printChild(ostream& s, string str) const;
 
     // Printing dot file of graph. Region and Node implements dot_print_element()
-    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) {}
-    void dot_print();
+    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const {}
+    void dot_print() const;
     void printEdges(ostream& s) const;
-    int id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter);
-    void print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file);
+    int id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter) const;
+    void print_label(string id, string label_content, unordered_map<string, int>& node_map, int& node_map_counter, ostream& dot_file) const;
 };

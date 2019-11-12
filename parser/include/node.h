@@ -34,8 +34,8 @@ public:
     void appendIn(Element* e) { appendInput(e); };
     void appendOut(Element* e) { appendOutput(e); };
 
-    vector<Element*> getIn() { return inputs; }
-    vector<Element*> getOut() { return outputs; }
+    vector<Element*> getIn() const { return inputs; }
+    vector<Element*> getOut() const { return outputs; }
 
     // Printing the graph corresponding to the parsed input. Region and Node implements print()
     friend ostream& operator<<(ostream& s, const Node& node)
@@ -50,6 +50,6 @@ public:
     static NodeType getNodeType(const char str[]);
     const char* getNodeTypeString() const;
     void print(ostream& s) const;
-    string replace_dot_arrow_name();
-    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file);
+    string replace_dot_arrow_name() const;
+    void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const;
 };

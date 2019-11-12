@@ -35,7 +35,7 @@ void Region::print(ostream& s) const
 // If the edge is in the regions arguments or results, this is modeled by a single node for each input/out *and*
 // a common entry/exit node for the region such that each argument is the child of the regions entry node and
 // all result nodes have the regions exit node as a child
-void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     for (Edge* e : edges) {
         string source_id = e->source->id;
@@ -67,16 +67,16 @@ void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map
 }
 
 // Assumes that e is an instance of Node and returns its node type string
-string Region::getNodeTypeString(Element* e)
+string Region::getNodeTypeString(Element* e) const
 {
     return static_cast<Node*>(e)->getNodeTypeString();
 }
 
 // Prints the node map ids and corresponding labels for the nodes in the region with type/name and id.
-// Arguments and results, are beeing denoted by the type the containing node, and id of the containing region,
+// Arguments and results, are being denoted by the type the containing node, and id of the containing region,
 // which is why we get the parent->parent->type and parent->id for these cases respectively
 
-void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     if (!arguments.empty()) {
         Element* e = arguments.back();
@@ -92,7 +92,7 @@ void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node
     }
 }
 
-void Region::dot_print_results(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Region::dot_print_results(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     if (!results.empty()) {
         Element* e = results.back();
@@ -109,16 +109,16 @@ void Region::dot_print_results(unordered_map<string, int>& node_map, int& node_m
 }
 
 // For each node child of the region: print node map id of the node with a corresponding label containing name/type and id
-void Region::dot_print_nodes(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Region::dot_print_nodes(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     for (Element* e : children)
         e->dot_print_element(node_map, node_map_counter, dot_file);
 }
 
-// For each node child of the region, recurse into it and print all its potential childen
-// since the tree alternates node->region->node->region->... thil will always call the
+// For each node child of the region, recurse into it and print all its potential children
+// since the tree alternates node->region->node->region->... this will always call the
 // dot_print_element function in this file and we will recurse the tree
-void Region::dot_print_children()
+void Region::dot_print_children() const
 {
     for (Element* e : children)
         e->dot_print();
@@ -129,7 +129,7 @@ void Region::dot_print_children()
 // all id's are aliased to an integer from 0 in rising order as they are discovered.
 // the nodemap contains the mapping from string id to integer id and the map counter
 // contains the value of the last assigned node
-void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     node_map.clear();
     node_map_counter = 0;

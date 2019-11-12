@@ -46,7 +46,7 @@ void Node::print(ostream& s) const
 // Printing dot file of graph
 
 // the "->" string is reserved in the dot file format, so it needs to be escaped
-string Node::replace_dot_arrow_name()
+string Node::replace_dot_arrow_name() const
 {
     string node = name;
     int index = 0;
@@ -57,7 +57,7 @@ string Node::replace_dot_arrow_name()
 }
 
 // print node map id of the node with a corresponding label containing name/type and id
-void Node::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
+void Node::dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const
 {
     string node;
     if (type == NODE)
