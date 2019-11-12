@@ -40,29 +40,31 @@ void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map
     for (Edge* e : edges) {
         string source_id = e->source->id;
         string target_id = e->target->id;
-        int entry_id = -1;
-        int exit_id = -1;
 
-        if (in_arguments(e->source))
-            entry_id = id_from_map("entry_" + e->source->parent->id, node_map, node_map_counter);
-        else
+        // If node is not a argument/result we model the input/output as edges in/out from the parent node
+        if (!in_arguments(e->source))
             source_id = e->source->parent->id;
 
-        if (in_results(e->target))
-            exit_id = id_from_map("exit_" + e->target->parent->id, node_map, node_map_counter);
-        else
+        if (!in_results(e->target))
             target_id = e->target->parent->id;
 
         int source_map_id = id_from_map(source_id, node_map, node_map_counter);
         int target_map_id = id_from_map(target_id, node_map, node_map_counter);
 
         log_edge(source_map_id, target_map_id);
+    }
 
-        if (entry_id >= 0)
-            log_edge(entry_id, source_map_id);
+    // Create an edge from the entry/exit node of the region to the argument/result nodes of the region
+    int entry_id = id_from_map("entry_" + id, node_map, node_map_counter);
+    for (Element* e : arguments) {
+        int argument_id = id_from_map(e->id, node_map, node_map_counter);
+        log_edge(entry_id, argument_id);
+    }
 
-        if (exit_id >= 0)
-            log_edge(target_map_id, exit_id);
+    int exit_id = id_from_map("exit_" + id, node_map, node_map_counter);
+    for (Element* e : results) {
+        int result_id = id_from_map(e->id, node_map, node_map_counter);
+        log_edge(result_id, exit_id);
     }
 }
 
@@ -149,9 +151,7 @@ void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_m
     log('\n');
 
     dot_print_arguments(node_map, node_map_counter, dot_file);
-
     dot_print_results(node_map, node_map_counter, dot_file);
-
     dot_print_nodes(node_map, node_map_counter, dot_file);
 
     log("}\n\n");
