@@ -29,26 +29,40 @@ void Region::print(ostream& s) const
 // Printing dot file of graph
 
 // Print each edge in the region aliased by the node map
-// each edge points to a argument/result or input/output of a containing region or node
-// here, this is modeled by, edges going into or out of the node and we thus print an edge to and from
+// Each edge points to a argument/result or input/output of a containing region or node
+// For simple nodes this is modeled by, edges going into or out of the node and we thus print an edge to and from
 // the node that the edge input/output are corresponding to, i.e. its parent
-// If the edge is in the regions arguments or results, this is modeled by a single node for each
+// If the edge is in the regions arguments or results, this is modeled by a single node for each input/out *and*
+// a common entry/exit node for the region such that each argument is the child of the regions entry node and
+// all result nodes have the regions exit node as a child
 void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file)
 {
     for (Edge* e : edges) {
-        string source_id = e->source->parent->id;
-        string target_id = e->target->parent->id;
+        string source_id = e->source->id;
+        string target_id = e->target->id;
+        int entry_id = -1;
+        int exit_id = -1;
 
         if (in_arguments(e->source))
-            source_id = "argument_" + source_id;
+            entry_id = id_from_map("entry_" + e->source->parent->id, node_map, node_map_counter);
+        else
+            source_id = e->source->parent->id;
 
         if (in_results(e->target))
-            target_id = "result_" + target_id;
+            exit_id = id_from_map("exit_" + e->target->parent->id, node_map, node_map_counter);
+        else
+            target_id = e->target->parent->id;
 
         int source_map_id = id_from_map(source_id, node_map, node_map_counter);
         int target_map_id = id_from_map(target_id, node_map, node_map_counter);
 
-        log('\t' << source_map_id << " -> " << target_map_id << '\n');
+        log_edge(source_map_id, target_map_id);
+
+        if (entry_id >= 0)
+            log_edge(entry_id, source_map_id);
+
+        if (exit_id >= 0)
+            log_edge(target_map_id, exit_id);
     }
 }
 
@@ -66,7 +80,13 @@ void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node
 {
     if (!arguments.empty()) {
         Element* e = arguments.back();
-        string id = "argument_" + e->parent->id;
+        string id = "entry_" + e->parent->id;
+        string type = getNodeTypeString(e->parent->parent);
+        print_label(id, type + "-entry|" + id, node_map, node_map_counter, dot_file);
+    }
+
+    for (Element* e : arguments) {
+        string id = e->id;
         string type = getNodeTypeString(e->parent->parent);
         print_label(id, type + "-argument|" + id, node_map, node_map_counter, dot_file);
     }
@@ -76,7 +96,13 @@ void Region::dot_print_results(unordered_map<string, int>& node_map, int& node_m
 {
     if (!results.empty()) {
         Element* e = results.back();
-        string id = "result_" + e->parent->id;
+        string id = "exit_" + e->parent->id;
+        string type = getNodeTypeString(e->parent->parent);
+        print_label(id, type + "-exit|" + id, node_map, node_map_counter, dot_file);
+    }
+
+    for (Element* e : results) {
+        string id = e->id;
         string type = getNodeTypeString(e->parent->parent);
         print_label(id, type + "-result|" + id, node_map, node_map_counter, dot_file);
     }

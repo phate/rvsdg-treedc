@@ -25,9 +25,13 @@ class Edge;
 ///////////////////////////////////////////////////////////////////////////////
 
 // Write output to both stdout and file
-#define log(s) \
-    cout << s; \
-    dot_file << s
+#define log(s)         \
+    do {               \
+        cout << s;     \
+        dot_file << s; \
+    } while (0)
+#define log_edge(e1, e2) \
+    log('\t' << e1 << " -> " << e2 << '\n')
 
 void print_depth(unsigned depth);
 
