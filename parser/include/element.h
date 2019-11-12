@@ -70,10 +70,14 @@ public:
     virtual void appendOut(Element* e) {}
 
     // Printing the graph corresponding to the parsed input. Region and Node implements print()
+    void xml_print(ostream& s = cout) const
+    {
+        for (Element* e : children)
+            e->print(s);
+    }
     friend ostream& operator<<(ostream& s, const Element& element)
     {
-        for (Element* e : element.children)
-            e->print(s);
+        element.xml_print(s);
         return s;
     }
     virtual void print(ostream& s) const { s << " id=" << id << " "; };

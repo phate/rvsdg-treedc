@@ -1,7 +1,7 @@
 #include "node.h"
 
-constexpr int NodeTypeLen = 6;
-constexpr const char* NodeTypeStrings[] = { "node", "lambda", "gamma", "theta", "phi", "unknown" };
+constexpr int NodeTypeLen = 7;
+constexpr const char* NodeTypeStrings[] = { "node", "rvsdg", "lambda", "gamma", "theta", "phi", "delta" };
 
 Node::NodeType Node::getNodeType(const char str[])
 {

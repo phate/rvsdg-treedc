@@ -48,9 +48,9 @@ Element* add_structuredNode(xml_node& node, Element* parent, unsigned depth)
     return child;
 }
 
-Element* add_structuredNode_unknown(xml_node& node, Element* parent, unsigned depth)
+Element* add_structuredNode_delta(xml_node& node, Element* parent, unsigned depth)
 {
-    Node::NodeType childType = Node::UNKNOWN;
+    Node::NodeType childType = Node::DELTA;
     Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
     parent->appendChild(child);
     return child;
@@ -160,9 +160,11 @@ Element* parseNode(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child = nullptr;
 
-    if (is_node(TAG_NODE) && empty_val(ATTR_TYPE) && empty_val(ATTR_NAME))
-        child = add_structuredNode_unknown(node, parent, depth);
-    else if (is_node(TAG_NODE) && !empty_val(ATTR_TYPE))
+    if (is_node(TAG_NODE) && empty_val(ATTR_TYPE) && empty_val(ATTR_NAME)) {
+        // a node without type or name is a delta node since this is not yet implemented in jlm
+        node->attribute("type").set_value("delta");
+        child = add_structuredNode(node, parent, depth);
+    } else if (is_node(TAG_NODE) && !empty_val(ATTR_TYPE))
         child = add_structuredNode(node, parent, depth);
     else if (is_node(TAG_NODE) && !empty_val(ATTR_NAME))
         child = add_simpleNode(node, parent, depth);
@@ -230,12 +232,13 @@ void parse_rvsdg_xml(const char rvsdg_xml[])
 {
     pugi::xml_document doc = load_xml(rvsdg_xml);
     pugi::xml_node rvsdg = doc.child(ROOT_NODE);
-    Element root(ROOT_NODE);
+    Node root(ROOT_NODE, "", Node::RVSDG, 0, nullptr);
     cout << "Parsing input ...\n\n";
+
     traverse(rvsdg, &root, 0);
 
-    cout << "\n\nResulting graph:\n\n"
-         << root;
+    cout << "\n\nResulting graph:\n\n";
+    root.xml_print();
 
     cout << "\n\nResulting dotfiles:\n\n";
     root.dot_print();

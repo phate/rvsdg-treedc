@@ -9,11 +9,12 @@ class Node : public Element {
 public:
     enum NodeType {
         NODE,
+        RVSDG,
         LAMBDA,
         GAMMA,
         THETA,
         PHI,
-        UNKNOWN
+        DELTA
     };
 
     string name;
