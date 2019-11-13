@@ -55,16 +55,20 @@ void Region::dot_print_edges(unordered_map<string, int>& node_map, int& node_map
     }
 
     // Create an edge from the entry/exit node of the region to the argument/result nodes of the region
-    int entry_id = id_from_map("entry_" + id, node_map, node_map_counter);
-    for (Element* e : arguments) {
-        int argument_id = id_from_map(e->id, node_map, node_map_counter);
-        log_edge(entry_id, argument_id);
+    if (!arguments.empty()) {
+        int entry_id = id_from_map("entry_" + id, node_map, node_map_counter);
+        for (Element* e : arguments) {
+            int argument_id = id_from_map(e->id, node_map, node_map_counter);
+            log_edge(entry_id, argument_id);
+        }
     }
 
-    int exit_id = id_from_map("exit_" + id, node_map, node_map_counter);
-    for (Element* e : results) {
-        int result_id = id_from_map(e->id, node_map, node_map_counter);
-        log_edge(result_id, exit_id);
+    if (!results.empty()) {
+        int exit_id = id_from_map("exit_" + id, node_map, node_map_counter);
+        for (Element* e : results) {
+            int result_id = id_from_map(e->id, node_map, node_map_counter);
+            log_edge(result_id, exit_id);
+        }
     }
 }
 
