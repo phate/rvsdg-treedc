@@ -96,10 +96,10 @@ Graph tree_from_bags(vector<Graph>& bags)
 
     // to figure out what nodes in the tree to connect, use the heuristic of of connecting the bags
     // with most edges between them in G
-    for (int i = 0; i < bags.size(); ++i) {
+    for (size_t i = 0; i < bags.size(); ++i) {
         int max_common = 0;
         pair<int, int> max_common_elem;
-        for (int j = 0; j < bags.size(); j++) {
+        for (size_t j = 0; j < bags.size(); j++) {
             if (i == j || Tree.getNode(i).hasNext()) // only add one neighbor per bag
                 continue;
 

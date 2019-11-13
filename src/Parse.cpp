@@ -22,7 +22,7 @@ void parse_line(string token, vector<int>& tokens)
 
 bool in_token(string find, string token)
 {
-    int index = 0;
+    size_t index = 0;
     index = token.find(find, index);
     return index != std::string::npos;
 }

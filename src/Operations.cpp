@@ -44,8 +44,8 @@ int Graph::commonNodes(const Graph& g) const
     vector<int> g1nodes = activeNodes();
     vector<int> g2nodes = g.activeNodes();
     int common = 0;
-    for (int i = 0; i < g1nodes.size(); ++i)
-        for (int j = 0; j < g2nodes.size(); j++)
+    for (size_t i = 0; i < g1nodes.size(); ++i)
+        for (size_t j = 0; j < g2nodes.size(); j++)
             if (g1nodes[i] == g2nodes[j])
                 ++common;
 

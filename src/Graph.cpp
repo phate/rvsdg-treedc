@@ -7,17 +7,17 @@ Node::Node(int* label, string* name)
 {
     this->label = label;
     this->name = name;
-};
+}
 
 Node::Node(int* label)
 {
     Node(label, nullptr);
-};
+}
 
 Node::Node()
 {
     Node(nullptr, nullptr);
-};
+}
 
 Graph::Graph(int size)
     : nodes(size, 0)
@@ -31,7 +31,8 @@ Graph::Graph(int size)
 }
 
 Graph::Graph()
-    : Graph(0) {};
+    : Graph(0)
+{}
 
 // Create a new graph with deep copies of g's assigned nodes
 Graph::Graph(const Graph& g)

@@ -159,7 +159,7 @@ pair<vector<int>, int> Graph::max_cardinality_heuristic()
 int Graph::maxLabeledNeighbors(vector<int> ordering) const
 {
     int max_labeled_element = 0, max_labeled = 0;
-    for (int i = 0; i < ordering.size(); ++i) {
+    for (size_t i = 0; i < ordering.size(); ++i) {
         if (!in(ordering, i)) {
 
             int labeled = 0;
