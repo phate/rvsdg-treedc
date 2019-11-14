@@ -27,7 +27,8 @@ class Edge;
 // Write output to both stdout and file
 #define log(s)         \
     do {               \
-        cout << s;     \
+        if (debug)     \
+            cout << s; \
         dot_file << s; \
     } while (0)
 #define log_edge(e1, e2) \

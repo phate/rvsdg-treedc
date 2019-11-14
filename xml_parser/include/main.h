@@ -15,3 +15,5 @@
 #include <vector>
 
 using namespace std;
+
+#define ROOT_DIR string(getenv("HOME")) + "/rvsdg-treedc/xml_parser/dot_files/"

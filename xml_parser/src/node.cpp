@@ -1,4 +1,5 @@
 #include "node.h"
+extern bool debug;
 
 constexpr int NodeTypeLen = 7;
 constexpr const char* NodeTypeStrings[] = { "node", "rvsdg", "lambda", "gamma", "theta", "phi", "delta" };

@@ -1,4 +1,5 @@
 #include "main.h"
+extern bool debug;
 
 /*
 TYPES
@@ -200,7 +201,8 @@ void traverse(pugi::xml_node& parent, Element* parent_element, unsigned depth = 
 {
     for (auto node = parent.begin(); node != parent.end(); ++node) {
 
-        printNode(node, depth);
+        if (debug)
+            printNode(node, depth);
 
         Element* child = parseNode(node, parent_element, depth);
 
@@ -216,14 +218,13 @@ pugi::xml_document load_xml(const char source[])
     pugi::xml_parse_result parse_result = doc.load_file(source);
 
     if (parse_result) {
-        cout << "XML [" << source << "] parsed without errors\n\n";
+        cout << "XML [" << source << "] parsed without errors\n";
     } else {
         cout << "XML [" << source << "] parsed with errors\n";
         cout << "Error description: " << parse_result.description() << "\n";
         cout << "Error offset: " << parse_result.offset << " (error at [..." << (source + parse_result.offset) << "]\n\n";
     }
 
-    cout << "Load result: " << parse_result.description() << "\n\n";
     return doc;
 }
 
@@ -233,13 +234,15 @@ void parse_rvsdg_xml(string rvsdg_xml)
     pugi::xml_document doc = load_xml(rvsdg_xml.c_str());
     pugi::xml_node rvsdg = doc.child(ROOT_NODE);
     Node root(ROOT_NODE, "", Node::RVSDG, 0, nullptr);
-    cout << "Parsing input ...\n\n";
+    cout << "Writing dotfiles to " << ROOT_DIR << "\n\n";
 
     traverse(rvsdg, &root, 0);
 
-    cout << "\n\nResulting graph:\n\n";
-    root.xml_print();
+    if (debug) {
+        cout << "\n\nResulting graph:\n\n";
+        root.xml_print();
 
-    cout << "\n\nResulting dotfiles:\n\n";
+        cout << "\n\nResulting dotfiles:\n\n";
+    }
     root.dot_print();
 }

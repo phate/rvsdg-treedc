@@ -1,4 +1,5 @@
 #include "region.h"
+extern bool debug;
 
 Region::~Region()
 {
@@ -143,7 +144,9 @@ void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_m
     string graph_name = getNodeTypeString(parent) + "_region_" + id;
     constexpr const char fmt_line[] = "\tnode [shape=record]\n\n";
 
-    dot_file.open("../dot_files/" + graph_name + ".dot");
+    string home = getenv("HOME");
+    dot_file.open(ROOT_DIR + graph_name + ".dot");
+
     if (!dot_file.is_open())
         cout << "Could not open " << graph_name << endl;
 
