@@ -15,7 +15,9 @@ class Graph;
 #include "Kleinberg.h"
 #include "Operations.h"
 #include "Parse.h"
+#include "run_dotfiles.h"
 
 #include "UnitTest++/UnitTest++.h"
 
 using namespace std;
+#define ROOT_DIR string(getenv("HOME")) + "/rvsdg-treedc/"

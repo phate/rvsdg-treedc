@@ -12,7 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(include)
 file (GLOB_RECURSE PROJECT_HEADERS include/*.h)
 file (GLOB_RECURSE PROJECT_SOURCES src/*.cpp)
-file (GLOB_RECURSE PROJECT_TESTS   test/tests.cpp)
+file (GLOB_RECURSE PROJECT_TESTS   test/unittests.cpp)
 
 # set main as output executable
 add_compile_options(${CMAKE_CSS_FLAGS})

@@ -102,7 +102,7 @@ Graph gen_graph(vector<vector<int>> adj_list)
 }
 
 // Return a graph object generated from a dot file
-Graph graph_from_dot(const char dot_file[])
+Graph graph_from_dot(string dot_file)
 {
-    return gen_graph(parse_dot(dot_file));
+    return gen_graph(parse_dot(dot_file.c_str()));
 }

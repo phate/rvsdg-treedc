@@ -8,4 +8,4 @@
 void parse_line(string token, vector<int>& tokens);
 vector<vector<int>> parse_dot(const char file[]);
 Graph gen_graph(vector<vector<int>> graph);
-Graph graph_from_dot(const char file[]);
+Graph graph_from_dot(string file);
