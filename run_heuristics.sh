@@ -12,14 +12,21 @@ RESULTS=run_heuristics.results
 echo '' > $LOG
 echo '' > $RESULTS
 
+graphs=0
+
 for f in $SOURCE_XML/*; do
     echo Running on benchmark: $f | tee -a $RESULTS
     find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
     ./$XML_PARSER $f  >> $LOG
     ./$HEURISTICS $DOTFILES | \
-        awk -v results=$RESULTS "/Highest treewidth/{print>>"results";next} 1" \
+        awk -v results=$RESULTS "/Highest|Lowest|Largest/{print>>"results"} 1" \
         >> $LOG
 
-    tail -n 1 $RESULTS
+    tail -n 3 $RESULTS
     echo "" | tee -a $RESULTS
+
+    gen_graphs=$(find $DOTFILES -type f -name \*.dot | wc -l)
+    graphs=$((graphs+gen_graphs))
 done
+
+echo Numbers of graphs analyzed: $graphs | tee -a $RESULTS
