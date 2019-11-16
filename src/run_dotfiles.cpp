@@ -38,6 +38,7 @@ string get_filename(min_max& m)
 {
     string fname = get<2>(m).filename();
     remove_if(fname.begin(), fname.end(), [](const char& c) { return c == '"'; });
+    fname.erase(fname.find(".dot"), 4);
     return fname;
 }
 

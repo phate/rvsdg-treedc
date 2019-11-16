@@ -12,6 +12,8 @@ RESULTS=run_heuristics.results
 echo '' > $LOG
 echo '' > $RESULTS
 
+if [[ $1 == "all" ]]; then
+
 graphs=0
 
 for f in $SOURCE_XML/*; do
@@ -30,3 +32,48 @@ for f in $SOURCE_XML/*; do
 done
 
 echo Numbers of graphs analyzed: $graphs | tee -a $RESULTS
+fi
+
+PLOTS=gnuplots
+PLOTGEN=plot.sh
+filenr=0
+
+if [[ $1 == "upper" ]]; then
+
+RESULTS=$PLOTS/upper.results
+
+for f in $SOURCE_XML/*; do
+    find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
+    ./$XML_PARSER $f  >> $LOG
+    printf "%d " $filenr >> $RESULTS
+    printf "%s " $(basename -s '.xml' $f) >> $RESULTS
+    ./$HEURISTICS $DOTFILES | grep "Highest" | grep -oP "(?<=max: )[^,]+" >> $RESULTS
+    tail -n 1 $RESULTS
+    filenr=$(($filenr+1))
+done
+
+cd $PLOTS && ./$PLOTGEN "upper"
+
+fi
+
+if [[ $1 == "gap" ]]; then
+
+RESULTS=$PLOTS/gap.results
+
+for f in $SOURCE_XML/*; do
+    find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
+    ./$XML_PARSER $f  >> $LOG
+    printf "%d " $filenr >> $RESULTS
+    printf "%s " $(basename -s '.xml' $f) >> $RESULTS
+    largest=$(./$HEURISTICS $DOTFILES | grep "Largest")
+    max=$(echo $largest | grep -oP "(?<=max: )[^,]+")
+    min=$(echo $largest | grep -oP "(?<=min: )[^,]+")
+    gap=$(($max - $min))
+    echo $gap $max-$min >> $RESULTS
+    tail -n 1 $RESULTS
+    filenr=$(($filenr+1))
+done
+
+cd $PLOTS && ./$PLOTGEN "gap"
+
+fi

@@ -36,3 +36,4 @@ gen_tests/showg
 # logfiles
 run_heuristics.log
 run_heuristics.results
+gnuplots/*.results
