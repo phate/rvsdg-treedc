@@ -3,7 +3,8 @@ typedef tuple<int, int, filesystem::path> min_max;
 void run_dotfile(string f, min_max& max, min_max& min, min_max& gap)
 {
     Graph G = graph_from_dot(f.c_str());
-    cout << "Graph: " << f << "\n\n";
+    cout << "Graph: " << f << "\n";
+    cout << "Number of nodes: " << G.size() << "\n\n";
 
     // cout << G << endl;
     // G.print_dotfile();

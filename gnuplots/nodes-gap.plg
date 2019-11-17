@@ -1,0 +1,18 @@
+#!/usr/bin/gnuplot -persist
+
+GNUTERM = "x11"
+
+load '~/gnuplot-colorbrewer/qualitative/Dark2.plt'
+
+# ================================== Error ==================================
+
+set xrange[0:210]
+set yrange[0:4]
+
+unset key
+
+set ylabel 'Treewidth gap'
+set xlabel 'Number of nodes in region'
+set offset 1,1,1
+
+plot 'nodes-gap.results' u 1:2 ls 6 pt 9 ps 2

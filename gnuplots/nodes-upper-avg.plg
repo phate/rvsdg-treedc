@@ -1,0 +1,21 @@
+#!/usr/bin/gnuplot -persist
+
+GNUTERM = "x11"
+
+load '~/gnuplot-colorbrewer/qualitative/Dark2.plt'
+
+# ================================== Error ==================================
+
+set auto x
+set auto y
+
+set boxwidth 0.8 absolute
+set style fill solid 1 border 0
+unset key
+
+set style data histograms
+set ylabel 'Average number of nodes'
+set xlabel 'Upper treewidth bound'
+set offset 1,1,1
+set grid ytics
+plot 'nodes-upper-avg.results' u 1:2:($1):xtic(1) w boxes lc variable

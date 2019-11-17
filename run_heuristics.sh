@@ -9,8 +9,8 @@ HEURISTICS=build/main
 LOG=run_heuristics.log
 RESULTS=run_heuristics.results
 
-echo '' > $LOG
-echo '' > $RESULTS
+:> $LOG
+:> $RESULTS
 
 if [[ $1 == "all" ]]; then
 
@@ -34,35 +34,49 @@ done
 echo Numbers of graphs analyzed: $graphs | tee -a $RESULTS
 fi
 
+# Functions for generating gnuplots of results
+
 PLOTS=gnuplots
 PLOTGEN=plot.sh
 filenr=0
 
-if [[ $1 == "upper" ]]; then
+PLOT=upper
+if [[ $1 == $PLOT ]]; then
 
-RESULTS=$PLOTS/upper.results
+echo Generating upper treewidth bound per benchmark plot ...
+RESULTS=$PLOTS/$PLOT.results
+:> $RESULTS
 
 for f in $SOURCE_XML/*; do
     find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
     ./$XML_PARSER $f  >> $LOG
+
     printf "%d " $filenr >> $RESULTS
     printf "%s " $(basename -s '.xml' $f) >> $RESULTS
-    ./$HEURISTICS $DOTFILES | grep "Highest" | grep -oP "(?<=max: )[^,]+" >> $RESULTS
+    ./$HEURISTICS $DOTFILES |\
+        grep "Highest" |\
+        grep -oP "(?<=max: )[^,]+" \
+        >> $RESULTS
+
     tail -n 1 $RESULTS
     filenr=$(($filenr+1))
 done
 
-cd $PLOTS && ./$PLOTGEN "upper"
+$(cd $PLOTS && ./$PLOTGEN $PLOT)
 
 fi
 
-if [[ $1 == "gap" ]]; then
+PLOT=gap
+if [[ $1 == $PLOT ]]; then
 
-RESULTS=$PLOTS/gap.results
+echo Generating largest treewidth gap per benchmark plot ...
+RESULTS=$PLOTS/$PLOT.results
+:> $RESULTS
 
 for f in $SOURCE_XML/*; do
     find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
     ./$XML_PARSER $f  >> $LOG
+
     printf "%d " $filenr >> $RESULTS
     printf "%s " $(basename -s '.xml' $f) >> $RESULTS
     largest=$(./$HEURISTICS $DOTFILES | grep "Largest")
@@ -70,10 +84,79 @@ for f in $SOURCE_XML/*; do
     min=$(echo $largest | grep -oP "(?<=min: )[^,]+")
     gap=$(($max - $min))
     echo $gap $max-$min >> $RESULTS
+
     tail -n 1 $RESULTS
     filenr=$(($filenr+1))
 done
 
-cd $PLOTS && ./$PLOTGEN "gap"
+$(cd $PLOTS && ./$PLOTGEN $PLOT)
+
+fi
+
+PLOT=nodes-upper
+if [[ $1 == $PLOT ]]; then
+
+echo Generating upper bound treewidth per number of nodes plot ...
+RESULTS=$PLOTS/$PLOT.results
+:> $RESULTS
+
+for f in $SOURCE_XML/*; do
+    find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
+    ./$XML_PARSER $f  >> $LOG
+
+    stats=$(./$HEURISTICS $DOTFILES | grep "Number of nodes\|minor_min_width_heuristic")
+    echo $stats | grep -oE '[0-9]+' | paste - - -d" " >> $RESULTS
+done
+
+$(cd $PLOTS && ./$PLOTGEN $PLOT)
+
+echo Generating average number of nodes per upper bound plot ...
+AVG_RESULTS=$PLOTS/$PLOT-avg.results
+:> $AVG_RESULTS
+
+max=$(awk '{if (max < $2) max = $2} END {print max}' $RESULTS)
+for i in $(seq $max); do
+    avg=$(awk -v i="$i" '$2 ~ i {total+=$1;lines+=1} END {print total/lines}' $RESULTS)
+    echo $i $avg >> $AVG_RESULTS
+done
+
+$(cd $PLOTS && ./$PLOTGEN $PLOT-avg)
+
+fi
+
+PLOT=nodes-gap
+if [[ $1 == $PLOT ]]; then
+
+echo Generating treewidth gap per number of nodes plot ...
+RESULTS=$PLOTS/$PLOT.results
+:> $RESULTS
+
+for f in $SOURCE_XML/*; do
+    find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
+    ./$XML_PARSER $f  >> $LOG
+
+    while read -r line; do
+        read -ra line<<<"$line"
+        gap=$((${line[2]} - ${line[1]}))
+        echo ${line[0]} $gap >> $RESULTS
+    done <<< \
+        $(./$HEURISTICS $DOTFILES | \
+        grep "Number of nodes\|minor_min_width_heuristic\|min_fill_heuristic" | \
+        grep -oE '[0-9]+' | paste - - - -d" ")
+done
+
+$(cd $PLOTS && ./$PLOTGEN $PLOT)
+
+echo Generating average number of nodes per treewidth gap plot ...
+AVG_RESULTS=$PLOTS/$PLOT-avg.results
+:> $AVG_RESULTS
+
+max=$(awk '{if (max < $2) max = $2} END {print max}' $RESULTS)
+for i in $(seq $max); do
+    avg=$(awk -v i="$i" '$2 ~ i {total+=$1;lines+=1} END {print total/lines}' $RESULTS)
+    echo $i $avg >> $AVG_RESULTS
+done
+
+$(cd $PLOTS && ./$PLOTGEN $PLOT-avg)
 
 fi
