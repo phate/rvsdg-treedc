@@ -7,7 +7,7 @@ load '~/gnuplot-colorbrewer/qualitative/Dark2.plt'
 # ================================== Error ==================================
 
 set xrange[0:210]
-set yrange[0:7]
+set yrange[0:10]
 
 unset key
 

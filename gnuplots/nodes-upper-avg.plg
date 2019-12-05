@@ -6,16 +6,17 @@ load '~/gnuplot-colorbrewer/qualitative/Dark2.plt'
 
 # ================================== Error ==================================
 
-set auto x
-set auto y
+set xrange[0:10]
+set yrange[0:200]
 
 set boxwidth 0.8 absolute
 set style fill solid 1 border 0
-unset key
+set key left
 
 set style data histograms
 set ylabel 'Average number of nodes'
 set xlabel 'Upper treewidth bound'
 set offset 1,1,1
 set grid ytics
-plot 'nodes-upper-avg.results' u 1:2:($1):xtic(1) w boxes lc variable
+plot 'nodes-upper-avg.results' u 1:2:($1):xtic(1) w boxes lc variable title '', \
+    10+2*x**2 ls 2 lw 2 linetype -1 dashtype 2 title ' 10 + 2x^2'
