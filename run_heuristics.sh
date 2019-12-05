@@ -104,7 +104,7 @@ for f in $SOURCE_XML/*; do
     find $DOTFILES -type f -name \*.dot -exec rm "{}" \;
     ./$XML_PARSER $f  >> $LOG
 
-    stats=$(./$HEURISTICS $DOTFILES | grep "Number of nodes\|minor_min_width_heuristic")
+    stats=$(./$HEURISTICS $DOTFILES | grep "Number of nodes\|min_fill_heuristic")
     echo $stats | grep -oE '[0-9]+' | paste - - -d" " >> $RESULTS
 done
 

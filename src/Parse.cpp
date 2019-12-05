@@ -12,10 +12,11 @@ void parse_line(string token, vector<int>& tokens)
 
 // Parser for a subset of the dotfile format where we assume:
 // - A single graph in the file
-// - Nodes are integers labeled from 0 to 1
-// - All edges out from a node are placed in a subgraph
-// - A simple, nondirected graph
-// It will otherwise ignore any labels in the graph
+// - Nodes are integers labeled from 0 to n
+// - All edges out from a node are placed in a subgraph OR every edge is place in a separate line
+// - Duplicate edges and orientation of edges are ignored
+// It will otherwise ignore any labels and node statements in the graph
+
 // Returns the graph represented as a adjacency list: each vector represents a
 // node, as the first element, with each subsequent node in the vector being
 // the nodes the root node has an edge to
@@ -28,7 +29,8 @@ bool in_token(string find, string token)
 }
 
 static const vector<string> node_line_blacklist = { "Graph", "graph", "node", "label", "//", "rank", "--", "->" };
-bool node_line(string token)
+
+bool is_node(string token)
 {
     if (token.empty() || token[0] == '}' || token[0] == '{')
         return false;
@@ -56,13 +58,13 @@ vector<vector<int>> parse_dot(const char file_name[])
 
         line_stream >> token;
 
-        if (!node_line(token))
+        if (!is_node(token))
             continue;
 
         vector<int> tokens;
 
         do
-            if (node_line(token))
+            if (is_node(token))
                 parse_line(token, tokens);
         while (line_stream >> token);
 

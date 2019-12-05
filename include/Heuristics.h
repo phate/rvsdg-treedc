@@ -4,7 +4,7 @@
 /*
  * Implementation of heuristics for upper and lower bound on treewidth.
  *
- * Heuristics run in polynomial in size of the graph can can form important candidates that could be used to place good upper bounds on the branch and bound scheme.
+ * Heuristics run in polynomial in size of the graph and can form important candidates that could be used to place good upper bounds on the branch and bound scheme.
  * The lower bound heuristics are also used to construct a perfect elimination ordering of the graph.
  *
  * Implementation based on Googate & Decher [https://arxiv.org/abs/1207.4109], and a reference python implementation in the D-Wave-NetworkX library

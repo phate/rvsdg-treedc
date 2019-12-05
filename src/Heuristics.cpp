@@ -46,7 +46,7 @@ pair<vector<int>, int> min_fill_heuristic(Graph g)
 // Based on ordering of the nodes that adds the fewest number of edges when eliminated from the graph.
 pair<vector<int>, int> Graph::min_fill_heuristic()
 {
-    vector<int> ordering(size());
+    vector<int> ordering(size(), -1);
     int upper_bound = 0;
     for (int i = 0; i < size(); ++i) {
 
