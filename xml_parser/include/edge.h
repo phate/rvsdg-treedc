@@ -7,6 +7,9 @@ class Edge {
 public:
     Element* source;
     Element* target;
+
+    // stores the id of a target when the corresponding
+    // Element is not yet parsed and created
     string target_str;
 
     Edge(Element* source, string target_str)
@@ -26,4 +29,9 @@ public:
     {}
 
     ~Edge() {}
+
+    bool waiting_for_element(string id)
+    {
+        return !target && target_str == id;
+    }
 };

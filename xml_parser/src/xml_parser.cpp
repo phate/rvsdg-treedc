@@ -41,7 +41,7 @@ Element* add_region(xml_node& node, Element* parent, unsigned depth)
     return child;
 }
 
-Element* add_structuredNode(xml_node& node, Element* parent, unsigned depth)
+Element* add_structured_node(xml_node& node, Element* parent, unsigned depth)
 {
     Node::NodeType childType = Node::getNodeType(val(ATTR_TYPE));
     Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
@@ -49,15 +49,7 @@ Element* add_structuredNode(xml_node& node, Element* parent, unsigned depth)
     return child;
 }
 
-Element* add_structuredNode_delta(xml_node& node, Element* parent, unsigned depth)
-{
-    Node::NodeType childType = Node::DELTA;
-    Element* child = new Node(val(ATTR_ID), "", childType, depth, parent);
-    parent->appendChild(child);
-    return child;
-}
-
-Element* add_simpleNode(xml_node& node, Element* parent, unsigned depth)
+Element* add_simple_node(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child = new Node(val(ATTR_ID), val(ATTR_NAME), Node::NODE, depth, parent);
     parent->appendChild(child);
@@ -77,18 +69,17 @@ void add_output(xml_node& node, Element* parent)
 }
 
 // since targets of edges may be parsed after the edge itself, we have to
-// check if a edge that points to the target exists when creating a result or input
+// check if an edge that points to the target exists when creating a result or input
 void resolve_edge_target(Element* parent, string id, Element* element)
 {
     // search through both the edges of the parent, and the edges of the
     // parents siblings (aka. the edge list of the parents parent)
-    // TODO: any cases where we have to search the edge lists of all parent to the top of the tree?
     for (Edge* e : parent->edges)
-        if (!e->target && e->target_str == id)
+        if (e->waiting_for_element(id))
             e->target = element;
 
     for (Edge* e : parent->parent->edges)
-        if (!e->target && e->target_str == id)
+        if (e->waiting_for_element(id))
             e->target = element;
 }
 
@@ -107,7 +98,7 @@ void add_result(xml_node& node, Element* parent)
 }
 
 // find the source or target node of an edge based on the string id
-// searches through the parents inputs and outputs / arguments and results, and
+// searches through the parents inputs/outputs or arguments/results, and
 // recurses through all the parents children (the edges siblings)
 Element* find_source(Element& parent, string id)
 {
@@ -157,18 +148,18 @@ void add_edge(xml_node& node, Element* parent)
         cout << "ERROR: could not find source" << endl;
 }
 
-Element* parseNode(xml_node& node, Element* parent, unsigned depth)
+Element* parse_node(xml_node& node, Element* parent, unsigned depth)
 {
     Element* child = nullptr;
 
     if (is_node(TAG_NODE) && empty_val(ATTR_TYPE) && empty_val(ATTR_NAME)) {
         // a node without type or name is a delta node since this is not yet implemented in jlm
         node->attribute("type").set_value("delta");
-        child = add_structuredNode(node, parent, depth);
+        child = add_structured_node(node, parent, depth);
     } else if (is_node(TAG_NODE) && !empty_val(ATTR_TYPE))
-        child = add_structuredNode(node, parent, depth);
+        child = add_structured_node(node, parent, depth);
     else if (is_node(TAG_NODE) && !empty_val(ATTR_NAME))
-        child = add_simpleNode(node, parent, depth);
+        child = add_simple_node(node, parent, depth);
     else if (is_node(TAG_REGION))
         child = add_region(node, parent, depth);
     else if (is_node(TAG_INPUT))
@@ -186,7 +177,7 @@ Element* parseNode(xml_node& node, Element* parent, unsigned depth)
 }
 
 // Print nodes while parsing
-void printNode(xml_node& node, unsigned depth)
+void print_node(xml_node& node, unsigned depth)
 {
     print_depth(depth);
     cout << node->name();
@@ -202,9 +193,9 @@ void traverse(pugi::xml_node& parent, Element* parent_element, unsigned depth = 
     for (auto node = parent.begin(); node != parent.end(); ++node) {
 
         if (debug)
-            printNode(node, depth);
+            print_node(node, depth);
 
-        Element* child = parseNode(node, parent_element, depth);
+        Element* child = parse_node(node, parent_element, depth);
 
         if (child)
             traverse(*node, child, depth + 1);
