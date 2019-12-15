@@ -1,5 +1,12 @@
 # rvsdg-treedc
 
+Tool to read a RVSDG represented as a dotfile, load it into an in-memory graph
+representation and run a set of heuristic treewidth algorithms on the graph.
+Implements and reports on heuristics described in [Googate & Detchter](https://arxiv.org/abs/1207.4109).
+
+Includes a tool to generate dotfiles from XML representation created by the
+`jlm` compiler. See more in `xml_parser/README.md`
+
 Building
 -------------------
 
@@ -8,9 +15,19 @@ Depends on the unittest-cpp framework: [Installation instructions](https://githu
     mkdir build
     cd build && cmake ..
     make
-    ./main
 
-Tests
+Running
+-------------------
+By default, parses and runs heuristics on every dotfile in `xml_parser/dotfiles`.
+Takes an optional argument to run on another directory.
+
+    ./main xml_parser/dotfiles
+
+The `run_heuristics.sh` script generates dotfiles from the RVSDG xml files in a source folder runs the heuristics on the generated graphs.
+The output from the heuristics are aggregated and logged to `run_heuristics.log`.
+The script also supports aggregating the output from the heuristics and feeding it into a set of gnuplot files to generate visualisations of the output.
+
+Testing
 -------------------
 
 A set of sanity tests in `test/tests.cpp` are setup to run on the default target `main`, and can be used in development.

@@ -94,7 +94,7 @@ Graph gen_graph(vector<vector<int>> adj_list)
         int root = n[0];
 
         for (size_t i = 1; i < n.size(); ++i) {
-            // make sure to not add duplicate edges as we assume the graph to have be simple (no parallel edges)
+            // make sure to not add duplicate edges as we require that the graph is simple (no parallel edges)
             if (!g.hasNeighbor(n[i], root))
                 g.addNode(root, n[i]);
         }

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Generate dotfiles from the RVSDG xml files in $SOURCE_XML and then run heuristics on the generated graphs
 # Results are logged to $RESULTS and the output from the parser and heuristics to $LOG
 

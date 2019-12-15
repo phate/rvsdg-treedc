@@ -1,5 +1,7 @@
 #include "run_dotfiles.h"
+
 typedef tuple<int, int, filesystem::path> min_max;
+
 void run_dotfile(string f, min_max& max, min_max& min, min_max& gap)
 {
     Graph G = graph_from_dot(f.c_str());
@@ -42,6 +44,9 @@ string get_filename(min_max& m)
     fname.erase(fname.find(".dot"), 4);
     return fname;
 }
+
+// Run the heurisitc algorithms and each dotfile in the xml_parse/dotfile directory.
+// Report the highest, lowest and largest treewidth gap for each graph.
 
 void run_dotfiles(string root)
 {
