@@ -28,6 +28,7 @@ for f in $SOURCE_XML/*; do
     echo "" | tee -a $RESULTS
 
     gen_graphs=$(find $DOTFILES -type f -name \*.dot | wc -l)
+    echo Generated $gen_graphs graphs
     graphs=$((graphs+gen_graphs))
 done
 

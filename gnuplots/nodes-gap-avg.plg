@@ -19,4 +19,4 @@ set xlabel 'Treewidth gap'
 set offset 1,1,1
 set grid ytics
 plot 'nodes-gap-avg.results' u 1:2:($1):xtic(1) w boxes lc variable title '', \
-     50+2*x**3 ls 2 lw 2 linetype -1 dashtype 2 title ' 50 + 2x^3'
+     50+2*x**3 ls 2 lw 2 linetype -1 dashtype 2 title ' n = 50 + 2g^3'
