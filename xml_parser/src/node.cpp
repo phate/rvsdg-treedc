@@ -50,7 +50,7 @@ void Node::print(ostream& s) const
 string Node::replace_dot_arrow_name() const
 {
     string node = name;
-    int index = 0;
+    long unsigned int index = 0;
     index = node.find("->", index);
     if (index != string::npos)
         node.replace(index, 2, "\\-\\>");

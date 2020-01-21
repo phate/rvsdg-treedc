@@ -47,8 +47,8 @@ public:
 
     Element(string id, unsigned depth, Element* parent)
         : id(id)
-        , depth(depth)
         , parent(parent)
+        , depth(depth)
     {}
 
     Element(string id, Element* parent)
@@ -67,8 +67,8 @@ public:
     virtual vector<Element*> getIn() const { return {}; }
     virtual vector<Element*> getOut() const { return {}; }
 
-    virtual void appendIn(Element* e) {}
-    virtual void appendOut(Element* e) {}
+    virtual void appendIn(Element*) {};
+    virtual void appendOut(Element*) {};
 
     // Printing the graph corresponding to the parsed input. Region and Node implements print()
     void xml_print(ostream& s = cout) const
@@ -86,7 +86,7 @@ public:
     void printChild(ostream& s, string str) const;
 
     // Printing dot file of graph. Region and Node implements dot_print_element()
-    virtual void dot_print_element(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const {}
+    virtual void dot_print_element(unordered_map<string, int>&, int&, ofstream&) const {}
     void dot_print() const;
     void printEdges(ostream& s) const;
     int id_from_map(string id, unordered_map<string, int>& node_map, int& node_map_counter) const;

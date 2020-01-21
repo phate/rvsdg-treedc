@@ -22,8 +22,8 @@ public:
 
     Node(string id, string name, NodeType type, unsigned treeviewRow, Element* parent)
         : Element(id, treeviewRow, parent)
-        , type(type)
         , name(name)
+        , type(type)
     {}
 
     virtual ~Node();

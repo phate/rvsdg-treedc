@@ -14,8 +14,8 @@ public:
 
     Edge(Element* source, string target_str)
         : source(source)
-        , target_str(target_str)
         , target(nullptr)
+        , target_str(target_str)
     {}
 
     Edge(Element* source, Element* target)
