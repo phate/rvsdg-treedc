@@ -145,7 +145,7 @@ void Region::dot_print_element(unordered_map<string, int>& node_map, int& node_m
     constexpr const char fmt_line[] = "\tnode [shape=record]\n\n";
 
     string home = getenv("HOME");
-    dot_file.open(ROOT_DIR + graph_name + ".dot");
+    dot_file.open(DOT_FILES + graph_name + ".dot");
 
     if (!dot_file.is_open())
         cout << "Could not open " << graph_name << endl;

@@ -55,6 +55,7 @@ void run_dotfiles(string root)
     min_max max = make_tuple(0, 0, "");
     min_max min = make_tuple(INT_MAX, INT_MAX, "");
     min_max gap = make_tuple(INT_MAX, 0, "");
+
     for (const auto& entry : filesystem::directory_iterator(root))
         if (entry.path().extension() == ".dot")
             run_dotfile(entry.path(), max, min, gap);

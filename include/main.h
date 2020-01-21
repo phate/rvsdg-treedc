@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string.h>
 #include <vector>
+#include <filesystem>
 
 #include "Graph.h"
 class Graph;
@@ -20,4 +21,4 @@ class Graph;
 #include "UnitTest++/UnitTest++.h"
 
 using namespace std;
-#define ROOT_DIR string(getenv("HOME")) + "/rvsdg-treedc/"
+#define ROOT_DIR filesystem::current_path().parent_path().string() + "/"

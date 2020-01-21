@@ -225,7 +225,7 @@ void parse_rvsdg_xml(string rvsdg_xml)
     pugi::xml_document doc = load_xml(rvsdg_xml.c_str());
     pugi::xml_node rvsdg = doc.child(ROOT_NODE);
     Node root(ROOT_NODE, "", Node::RVSDG, 0, nullptr);
-    cout << "Writing dotfiles to " << ROOT_DIR << "\n\n";
+    cout << "Writing dotfiles to " << DOT_FILES << "\n\n";
 
     traverse(rvsdg, &root, 0);
 

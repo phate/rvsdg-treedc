@@ -5,9 +5,8 @@ int main(int argc, char* argv[])
 {
     if (argc == 2)
         parse_rvsdg_xml(argv[1]);
-    else // assume debugging the program
-    {
+    else { // assume debugging the program
         debug = true;
-        parse_rvsdg_xml(string(getenv("HOME")) + "/jlm/rvsdg.xml");
+        parse_rvsdg_xml(JLM_DIR + "rvsdg.xml");
     }
 }
