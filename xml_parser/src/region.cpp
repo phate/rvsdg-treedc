@@ -80,7 +80,7 @@ string Region::getNodeTypeString(Element* e) const
 }
 
 // Prints the node map ids and corresponding labels for the nodes in the region with type/name and id.
-// Arguments and results, are being denoted by the type the containing node, and id of the containing region,
+// Arguments and results, are being denoted by the type of the containing node, and id of the containing region,
 // which is why we get the parent->parent->type and parent->id for these cases respectively
 
 void Region::dot_print_arguments(unordered_map<string, int>& node_map, int& node_map_counter, ofstream& dot_file) const

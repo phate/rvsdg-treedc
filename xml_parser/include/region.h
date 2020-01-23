@@ -6,8 +6,8 @@ class Region : public Element {
     vector<Element*> results;
 
 public:
-    Region(string id, unsigned treeviewRow, Element* parent)
-        : Element(id, treeviewRow, parent)
+    Region(string id, unsigned depth, Element* parent)
+        : Element(id, depth, parent)
     {}
 
     virtual ~Region();

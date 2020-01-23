@@ -2,10 +2,18 @@
 
 typedef tuple<int, int, filesystem::path> min_max;
 
-void run_dotfile(string f, min_max& max, min_max& min, min_max& gap)
+string get_filename(filesystem::path& m)
+{
+    string fname = m.filename();
+    remove_if(fname.begin(), fname.end(), [](const char& c) { return c == '"'; });
+    fname.erase(fname.find(".dot"), 4);
+    return fname;
+}
+
+void run_dotfile(filesystem::path f, min_max& max, min_max& min, min_max& gap)
 {
     Graph G = graph_from_dot(f.c_str());
-    cout << "Graph: " << f << "\n";
+    cout << "Graph: " << get_filename(f) << "\n";
     cout << "Number of nodes: " << G.size() << "\n\n";
 
     // cout << G << endl;
@@ -37,20 +45,12 @@ void run_dotfile(string f, min_max& max, min_max& min, min_max& gap)
         gap = make_tuple(hmin, hmax, f);
 }
 
-string get_filename(min_max& m)
-{
-    string fname = get<2>(m).filename();
-    remove_if(fname.begin(), fname.end(), [](const char& c) { return c == '"'; });
-    fname.erase(fname.find(".dot"), 4);
-    return fname;
-}
-
 // Run the heurisitc algorithms and each dotfile in the xml_parse/dotfile directory.
 // Report the highest, lowest and largest treewidth gap for each graph.
 
 void run_dotfiles(string root)
 {
-    cout << "Running on: " << root << endl;
+    cout << "Running on: " << root << "\n\n";
 
     min_max max = make_tuple(0, 0, "");
     min_max min = make_tuple(INT_MAX, INT_MAX, "");
@@ -60,7 +60,8 @@ void run_dotfiles(string root)
         if (entry.path().extension() == ".dot")
             run_dotfile(entry.path(), max, min, gap);
 
-    cout << "Highest treewidth: " << get_filename(max) << " - min: " << get<0>(max) << ", max: " << get<1>(max) << endl;
-    cout << "Lowest treewidth:  " << get_filename(min) << " - min: " << get<0>(min) << ", max: " << get<1>(min) << endl;
-    cout << "Largest gap:       " << get_filename(gap) << " - min: " << get<0>(gap) << ", max: " << get<1>(gap) << endl;
+
+    cout << "Highest treewidth: " << get_filename(get<2>(max)) << " - min: " << get<0>(max) << ", max: " << get<1>(max) << endl;
+    cout << "Lowest treewidth:  " << get_filename(get<2>(min)) << " - min: " << get<0>(min) << ", max: " << get<1>(min) << endl;
+    cout << "Largest gap:       " << get_filename(get<2>(gap)) << " - min: " << get<0>(gap) << ", max: " << get<1>(gap) << endl;
 }
