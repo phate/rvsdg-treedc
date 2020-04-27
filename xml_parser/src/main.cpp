@@ -7,6 +7,6 @@ int main(int argc, char* argv[])
         parse_rvsdg_xml(argv[1]);
     else { // assume debugging the program
         debug = true;
-        parse_rvsdg_xml(JLM_DIR + "rvsdg.xml");
+        parse_rvsdg_xml(XML_DEFAULT); // default xml-file set in CMakeLists.txt
     }
 }

@@ -1,0 +1,46 @@
+<rvsdg>
+    <region id="r94407094470208">
+        <node id="n94407094524112" name="" type="lambda">
+            <output id="o94407094531872"/>
+            <region id="r94407094524448">
+                <argument id="o94407094519680"/>
+                <node id="n94407094525792" name="BITS32(1)" type="">
+                    <output id="o94407094526096"/>
+                </node>
+                <edge source="o94407094526096" target="i94407094526992"/>
+                <node id="n94407094526560" name="ALLOCA" type="">
+                    <input id="i94407094526992"/>
+                    <input id="i94407094527216"/>
+                    <output id="o94407094527440"/>
+                    <output id="o94407094527648"/>
+                </node>
+                <edge source="o94407094527440" target="i94407094530608"/>
+                <edge source="o94407094527440" target="i94407094529024"/>
+                <edge source="o94407094527648" target="i94407094529504"/>
+                <node id="n94407094527888" name="BITS32(42)" type="">
+                    <output id="o94407094528128"/>
+                </node>
+                <edge source="o94407094528128" target="i94407094529280"/>
+                <node id="n94407094528560" name="STORE" type="">
+                    <input id="i94407094529024"/>
+                    <input id="i94407094529280"/>
+                    <input id="i94407094529504"/>
+                    <output id="o94407094529664"/>
+                </node>
+                <edge source="o94407094529664" target="i94407094531376"/>
+                <edge source="o94407094529664" target="i94407094530832"/>
+                <node id="n94407094525488" name="LOAD" type="">
+                    <input id="i94407094530608"/>
+                    <input id="i94407094530832"/>
+                    <output id="o94407094531056"/>
+                </node>
+                <edge source="o94407094531056" target="i94407094531296"/>
+                <result id="i94407094531296"/>
+                <result id="i94407094531376"/>
+                <edge source="o94407094519680" target="i94407094527216"/>
+            </region>
+        </node>
+        <edge source="o94407094531872" target="i94407094520544"/>
+        <result id="i94407094520544"/>
+    </region>
+</rvsdg>

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -6,7 +7,6 @@
 #include <sstream>
 #include <string.h>
 #include <vector>
-#include <filesystem>
 
 #include "Graph.h"
 class Graph;
@@ -21,4 +21,3 @@ class Graph;
 #include "UnitTest++/UnitTest++.h"
 
 using namespace std;
-#define ROOT_DIR filesystem::current_path().parent_path().string() + "/"

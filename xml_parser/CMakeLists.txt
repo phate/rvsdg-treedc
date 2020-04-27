@@ -1,12 +1,20 @@
 cmake_minimum_required(VERSION 3.13)
 
-project (main CXX)
+project (xml_parser CXX)
 
 # compileflags
 set(CMAKE_CSS_FLAGS "${CMAKE_CSS_FLAGS}" -Wall -Wextra -Wpedantic -std=c++17)
-
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# set output directory
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/../bin")
+
+# output directory for xml-files
+add_definitions( -DDOT_FILES="${PROJECT_SOURCE_DIR}/dot_files/" )
+
+# default xml file used for debugging
+add_definitions( -DXML_DEFAULT="${PROJECT_SOURCE_DIR}/../dot_files/rvsdg.xml" )
 
 # import XML parser library: pugi
 find_library(libpugixml_location NAMES libpugixml.a)

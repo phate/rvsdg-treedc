@@ -11,7 +11,8 @@ SUITE(graph)
 
     TEST(opening_dotfile)
     {
-        G = graph_from_dot(ROOT_DIR + "dot_files/decomp.dot");
+        string root_dir = ROOT_DIR;
+        G = graph_from_dot(root_dir + "/dot_files/decomp.dot");
     }
 
     TEST(init_graph)
@@ -79,7 +80,8 @@ SUITE(branchAndBound_K_7)
 
     TEST(opening_dotfile)
     {
-        G = graph_from_dot(ROOT_DIR + "dot_files/k7.dot");
+        string root_dir = ROOT_DIR;
+        G = graph_from_dot(root_dir + "/dot_files/k7.dot");
     }
 
     TEST(init_graph)

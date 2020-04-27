@@ -37,3 +37,6 @@ gen_tests/showg
 run_heuristics.log
 run_heuristics.results
 gnuplots/*.results
+
+# binary files
+bin
