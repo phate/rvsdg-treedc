@@ -2,8 +2,6 @@
 
 GNUTERM = "x11"
 
-load '~/gnuplot-colorbrewer/qualitative/Dark2.plt'
-
 # ================================== Error ==================================
 
 set xrange[0:210]
