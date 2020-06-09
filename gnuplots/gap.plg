@@ -1,20 +1,23 @@
 #!/usr/bin/gnuplot -persist
 
-GNUTERM = "x11"
+set terminal postscript eps enhanced color fontfile "/home/sigvesn/texgyrepagella-regular.pfb" "TeXGyrePagella-Regular,12"
+set output "gap.eps"
+load '~/etc/gnuplot-colorbrewer/qualitative/Dark2.plt'
 
 # ================================== Error ==================================
 
 set auto x
-set yrange [0:4]
+set yrange [0:9]
 
 set boxwidth 0.8 absolute
 set style fill solid 1 border 0
 unset key #below
 
 set style data histograms
-set ylabel 'Largest treewidth gap'
+set ylabel 'Largest treewidth gap' font ",16"
 set xtics rotate
 set offset 1,1,1
-set grid ytics
+set tics scale 0
+set tics font ",16"
 plot 'gap.results' u ($1):3:($0):xtic(2) w boxes lc variable,\
-     'gap.results' u ($1):3:($4) w labels offset 0,1
+     'gap.results' u ($1):3:($4) w labels font ",10" offset 0,1

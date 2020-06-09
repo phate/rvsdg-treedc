@@ -1,11 +1,13 @@
 #!/usr/bin/gnuplot -persist
 
-GNUTERM = "x11"
+set terminal postscript eps enhanced color fontfile "/home/sigvesn/texgyrepagella-regular.pfb" "TeXGyrePagella-Regular,16"
+set output "nodes-gap-avg.eps"
+load '~/etc/gnuplot-colorbrewer/qualitative/Dark2.plt'
 
 # ================================== Error ==================================
 
-set xrange[0:4]
-set yrange[0:180]
+set xrange[0:6]
+set yrange[0:170]
 
 set boxwidth 0.8 absolute
 set style fill solid 1 border 0
@@ -14,7 +16,6 @@ set key left
 set style data histograms
 set ylabel 'Average number of nodes'
 set xlabel 'Treewidth gap'
-set offset 1,1,1
-set grid ytics
+set tics scale 0
 plot 'nodes-gap-avg.results' u 1:2:($1):xtic(1) w boxes lc variable title '', \
-     50+2*x**3 ls 2 lw 2 linetype -1 dashtype 2 title ' n = 50 + 2g^3'
+     50+x**3 ls 2 lw 3 linetype -1 dashtype 2 title ' n = 50 + g^3' at 0.3,0.9

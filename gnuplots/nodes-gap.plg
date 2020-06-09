@@ -1,6 +1,8 @@
 #!/usr/bin/gnuplot -persist
 
-GNUTERM = "x11"
+set terminal postscript eps enhanced color fontfile "/home/sigvesn/texgyrepagella-regular.pfb" "TeXGyrePagella-Regular,16"
+set output "nodes-gap.eps"
+load '~/etc/gnuplot-colorbrewer/qualitative/Dark2.plt'
 
 # ================================== Error ==================================
 
@@ -12,5 +14,6 @@ unset key
 set ylabel 'Treewidth gap'
 set xlabel 'Number of nodes in region'
 set offset 1,1,1
+set tics scale 0
 
 plot 'nodes-gap.results' u 1:2 ls 6 pt 9 ps 2

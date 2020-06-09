@@ -1,11 +1,13 @@
 #!/usr/bin/gnuplot -persist
 
-GNUTERM = "x11"
+set terminal postscript eps enhanced color fontfile "/home/sigvesn/texgyrepagella-regular.pfb" "TeXGyrePagella-Regular,16"
+set output "nodes-upper-avg.eps"
+load '~/etc/gnuplot-colorbrewer/qualitative/Dark2.plt'
 
 # ================================== Error ==================================
 
-set xrange[0:10]
-set yrange[0:200]
+set xrange[0:12]
+set yrange[0:170]
 
 set boxwidth 0.8 absolute
 set style fill solid 1 border 0
@@ -14,7 +16,7 @@ set key left
 set style data histograms
 set ylabel 'Average number of nodes'
 set xlabel 'Upper treewidth bound'
-set offset 1,1,1
-set grid ytics
+# set offset 1,1,1
+set tics scale 0
 plot 'nodes-upper-avg.results' u 1:2:($1):xtic(1) w boxes lc variable title '', \
-    10+2*x**2 ls 2 lw 2 linetype -1 dashtype 2 title ' n = 10 + 2tw^2'
+    20+1.3*x**2 ls 2 lw 3 linetype -1 dashtype 2 title ' n = 20 + 1.3tw^2' at 0.3,0.9
