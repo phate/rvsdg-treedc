@@ -10,7 +10,7 @@ def blueprint():
 
 def create_test(blueprint, fname, graph, lb, ub):
 
-    finput =  "../test/heuristics/dot_files/{}.dot".format(fname)
+    finput =  "test/heuristics/dot_files/{}.dot".format(fname)
     foutput = "../test/heuristics/tests/{}.cpp".format(fname)
 
     print("Creating heuristic test from {} in {}".format(finput, foutput))

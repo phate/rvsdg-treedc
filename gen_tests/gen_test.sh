@@ -7,12 +7,12 @@
 i=0
 while read -r test; do
 
-    read -r -a t <<< "${test}"
+    read -r -a t <<<"${test}"
 
     # skip empty line
-	[ -z "${test}" ] && continue
+    [ -z "${test}" ] && continue
 
-    fname="graph${i}" && (( i++  ))
+    fname="graph${i}" && ((i++))
     graph="${t[0]}"
     ub="${t[1]}"
     lb="${t[2]}"
@@ -32,4 +32,4 @@ while read -r test; do
 
     echo
 
-done < test_config.txt
+done <test_config.txt
