@@ -60,8 +60,11 @@ void run_dotfiles(string root)
         if (entry.path().extension() == ".dot")
             run_dotfile(entry.path(), max, min, gap);
 
-
-    cout << "Highest treewidth: " << get_filename(get<2>(max)) << " - min: " << get<0>(max) << ", max: " << get<1>(max) << endl;
-    cout << "Lowest treewidth:  " << get_filename(get<2>(min)) << " - min: " << get<0>(min) << ", max: " << get<1>(min) << endl;
-    cout << "Largest gap:       " << get_filename(get<2>(gap)) << " - min: " << get<0>(gap) << ", max: " << get<1>(gap) << endl;
+    if (get<2>(max).string().size() == 0)
+        cout << "No dotfiles tested" << endl;
+    else {
+        cout << "Highest treewidth: " << get_filename(get<2>(max)) << " - min: " << get<0>(max) << ", max: " << get<1>(max) << endl;
+        cout << "Lowest treewidth:  " << get_filename(get<2>(min)) << " - min: " << get<0>(min) << ", max: " << get<1>(min) << endl;
+        cout << "Largest gap:       " << get_filename(get<2>(gap)) << " - min: " << get<0>(gap) << ", max: " << get<1>(gap) << endl;
+    }
 }
